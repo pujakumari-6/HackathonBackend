@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'healthcare',
+    'doctor',
 ]
 
 MIDDLEWARE = [
@@ -77,14 +79,13 @@ WSGI_APPLICATION = 'Hackfest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'Hackfest',
-       'USER': 'postgres',
-       'PASSWORD': '1234',
-       'HOST': 'localhost',
-       'PORT': '5432',
+        'NAME': 'Hackfest',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
