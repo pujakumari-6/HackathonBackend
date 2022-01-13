@@ -29,5 +29,8 @@ def doctor_logout(request):
         return redirect('/doctor/loginpage')
     except:
         return HttpResponse("<h3>Somthing is wrong !!!!!</h3>")
-
+#Patients List 
+def patientList(request):
+    data = Patient.objects.all()
+    return render(request, "patientlist.html", {'data':data})   
 
