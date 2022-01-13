@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
+from .models import Prescription, PrescribedMedicine, Medicine
+from healthcare.models import Patient, PatientRecord
 from django.contrib.auth.models import User
 from .helpers import *
 import uuid
@@ -35,7 +37,10 @@ def doctor_logout(request):
         return redirect('/doctor/loginpage')
     except:
         return HttpResponse("<h3>Somthing is wrong !!!!!</h3>")
-
+#Patients List 
+def patientList(request):
+    data = Patient.objects.all()
+    return render(request, "patientlist.html", {'data':data})   
 
 
 
