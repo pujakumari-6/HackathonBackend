@@ -30,20 +30,22 @@ class Patient(models.Model):
     name = models.CharField(max_length=150, null=False,blank=False)
     phone_regex = RegexValidator(regex=r'^[6-9]\d{9}$', message="Please enter valid mobile number.")
     mobile = models.CharField(validators=[phone_regex], max_length=10, blank=True)
-    blood_group = models.IntegerField(choices=BLOOD_GROUP_CHOICE, default=1)
+    email = models.EmailField(null=False,blank=False)
+    registrationNumber = models.CharField(max_length=10)
+    bloodGroup = models.IntegerField(choices=BLOOD_GROUP_CHOICE, default=1)
     gender = models.IntegerField(choices=GENDER_CHOICE, default=1)
     age = models.PositiveIntegerField(default=0)
-    Height = models.IntegerField
+    height = models.IntegerField
 
 class PatientRecord(models.Model):
-    PatientId = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    Allergies = models.TextField(null=True,blank=False)
-    Symptoms = models.TextField(null=True,blank=False)
-    PregnancyStatus=models.BooleanField(default=False)
-    PreviousSurgery = models.TextField(null=True,blank=False)
-    IsDiabetic = models.BooleanField(default=False)
-    InsurancePlanName = models.CharField( max_length=10, blank=True)
-    Status = models.IntegerField(choices=STATUS)
+    patientId = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    allergies = models.TextField(null=True,blank=False)
+    symptoms = models.TextField(null=True,blank=False)
+    pregnancyStatus=models.BooleanField(default=False)
+    previousSurgery = models.TextField(null=True,blank=False)
+    isDiabetic = models.BooleanField(default=False)
+    insurancePlanName = models.CharField( max_length=10, blank=True)
+    status = models.IntegerField(choices=STATUS)
 
 
 
