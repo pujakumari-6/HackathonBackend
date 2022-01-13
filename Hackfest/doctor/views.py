@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 
 # Create your views here.
 
+
 def docter_login(request):
     try:
         if request.method =='POST':
