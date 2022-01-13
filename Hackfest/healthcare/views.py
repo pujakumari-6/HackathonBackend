@@ -13,13 +13,13 @@ def newPatient(request):
                 email = request.POST['email']
                 gender = request.POST['gender']
                 dateOfBirth = request.POST['dateOfBirth']
-                height = request.POST['height']
-                bloodGroup = request.POST['blood_group']
+                bloodGroup = request.POST['bloodGroup']
                 uuidNo = str(uuid.uuid4()).replace("-","")[0:10]
                 registrationNumber = name.replace(' ','')+uuidNo+str(random.randint(2345678909800, 9923456789000))[0:5]
-                patientData = Patient(name,mobile,email,gender,dateOfBirth,height,bloodGroup,registrationNumber)
+                patientData = Patient(1,name,mobile,email,registrationNumber,bloodGroup,gender,dateOfBirth)
                 patientData.save()
-                return redirect('healthcare/newPatient', patientData)
+                # return redirect('newPatient', patientData)
+                render(request, 'new_patient.html')
             else:
                 return render(request, 'new_patient.html')
     # else:

@@ -35,6 +35,7 @@ class Patient(models.Model):
     bloodGroup = models.IntegerField(choices=BLOOD_GROUP_CHOICE, default=1)
     gender = models.IntegerField(choices=GENDER_CHOICE, default=1)
     dateOfBirth = models.DateField(null=False)
+# todo:// patient created date
 class PatientRecord(models.Model):
     patientId = models.ForeignKey(Patient, on_delete=models.CASCADE)
     height = models.IntegerField
@@ -47,5 +48,5 @@ class PatientRecord(models.Model):
     insurancePlanName = models.CharField( max_length=10, blank=True)
     status = models.IntegerField(choices=STATUS)
 
-
+# # todo:// patientrecord created date and updated date
 
