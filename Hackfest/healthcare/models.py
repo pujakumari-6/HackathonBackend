@@ -34,11 +34,11 @@ class Patient(models.Model):
     registrationNumber = models.CharField(max_length=10)
     bloodGroup = models.IntegerField(choices=BLOOD_GROUP_CHOICE, default=1)
     gender = models.IntegerField(choices=GENDER_CHOICE, default=1)
-    age = models.PositiveIntegerField(default=0)
-    height = models.IntegerField
-
+    dateOfBirth = models.DateField(null=False)
 class PatientRecord(models.Model):
     patientId = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    height = models.IntegerField
+    weight = models.IntegerField(null=False,blank=False)
     allergies = models.TextField(null=True,blank=False)
     symptoms = models.TextField(null=True,blank=False)
     pregnancyStatus=models.BooleanField(default=False)

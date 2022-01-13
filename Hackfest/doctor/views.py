@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 def view_login(request):
     return render(request, 'index.html')
 
+
 def docter_login(request):
     try:
         uname=request.POST.get('uname',None)
