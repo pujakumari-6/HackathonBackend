@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
+from .models import Prescription, PrescribedMedicine, Medicine
+from healthcare.models import Patient, PatientRecord
 from django.contrib.auth.models import User
 
 
