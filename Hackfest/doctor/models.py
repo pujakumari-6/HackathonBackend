@@ -56,5 +56,5 @@ class Roles(models.Model):
       (3,'admin'),
   )
   user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
-  user=models.OneToOneField(Profile, on_delete=models.CASCADE)
+  user=models.OneToOneField(User, on_delete=models.CASCADE)
     
