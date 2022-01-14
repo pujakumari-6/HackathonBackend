@@ -24,7 +24,7 @@ def docter_login(request):
                 return HttpResponse("Invalid creadentials...")
 
         else:
-            return render(request, 'index.html')
+            return render(request, 'doctor.html')
 
     except:
         return HttpResponse("<h3>Somthing is wrong !!!!!</h3>")
@@ -37,11 +37,23 @@ def doctor_logout(request):
         return redirect('/doctor/loginpage')
     except:
         return HttpResponse("<h3>Somthing is wrong !!!!!</h3>")
+    
+    
+    
 #Patients List 
 def patientList(request):
     data = Patient.objects.all()
     return render(request, "patientlist.html", {'data':data})   
 
+
+
+#Patient Record Display
+def patientRecord(request, id):
+    print(id)
+    patient = PatientRecord.objects.get(id=id)
+    print(patient.Allergies)
+    details = Patient.objects.get(pk=id)
+    return render(request, "patientrecord.html", {'details':details}) 
 
 
 def forgot_password(request):
