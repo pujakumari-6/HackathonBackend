@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate
 # Create your views here.
 
 
-def docter_login(request):
+def docterLogin(request):
     try:
         if request.method =='POST':
             uname=request.POST.get('uname',None)
