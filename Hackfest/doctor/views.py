@@ -142,10 +142,11 @@ def addMedicineOnPrescription(request):
         prescribedMedicineQuantity=request.POST['prescribedMedicineQuantity']
         prescribedMedicineTakenQuantity=request.POST['prescribedMedicineTakenQuantity']
         prescribedMedicinePrescription=request.POST['prescriptionId']
+        prescribedMedicineDiagnosis= request.POST['prescriptionDiagnosis']
         medicine = Medicine.objects.get(medicineId=prescribedMedicineMedicine)
         prescription = Prescription.objects.get(prescriptionId=prescribedMedicinePrescription)
 
-        prescribedMedicine = PrescribedMedicine(prescribedMedicineDuration=prescribedMedicineDuration,prescribedMedicineMedicine=medicine,prescribedMedicineQuantity=prescribedMedicineQuantity,prescribedMedicineTakenQuantity=prescribedMedicineTakenQuantity,prescribedMedicinePrescription=prescription)
+        prescribedMedicine = PrescribedMedicine(prescribedMedicineDuration=prescribedMedicineDuration,prescribedMedicineMedicine=medicine,prescribedMedicineQuantity=prescribedMedicineQuantity,prescribedMedicineTakenQuantity=prescribedMedicineTakenQuantity,prescribedMedicineDiagnosis=prescribedMedicineDiagnosis,prescribedMedicinePrescription=prescription)
         prescribedMedicine.save()
         return HttpResponse("added")
 
