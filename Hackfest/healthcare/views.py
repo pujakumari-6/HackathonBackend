@@ -5,6 +5,9 @@ from healthcare.models import Patient
 import uuid
 # Create your views here.
 
+
+
+
 def newPatient(request):
     # if request.session.has_key('uid'):
             if request.method == 'POST':
