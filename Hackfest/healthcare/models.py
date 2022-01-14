@@ -27,6 +27,7 @@ class Patient(models.Model):
         (2,_("Female")),
         (3,_("Other")),
     )
+    patientId = models.AutoField(primary_key=True)
     name = models.CharField(max_length=150, null=False,blank=False)
     phone_regex = RegexValidator(regex=r'^[6-9]\d{9}$', message="Please enter valid mobile number.")
     mobile = models.CharField(validators=[phone_regex], max_length=10, blank=True)
