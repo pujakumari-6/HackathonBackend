@@ -51,5 +51,41 @@ def patientRecord(request):
     # else:
     #         return redirect('/')
 
-
+def patientRecord(request, patientId):
+    # if request.session.has_key('uid'):
+            if request.method == 'POST':
+                try:
+                    pId = patientId
+                    height = request.POST['height']
+                    weight = request.POST['weight']
+                    allergies = request.POST['allergies']
+                    pregnancyStatus = request.POST['pregnancyStatus']
+                    insurancePlanName = request.POST['insurancePlanName']
+                    isDiabetic = request.POST['isDiabetic']
+                    insurancePlanName = request.POST['insurancePlanName']
+                    insurancePlanNumber = request.POST['insurancePlanNumber']
+                    previousSurgery = request.POST['previousSurgery']
+                    status = request.POST['status']
+                    patientRecord = PatientRecord()
+                    patientRecord.patientId = pId
+                    patientRecord.height = height
+                    patientRecord.weight = weight
+                    patientRecord.allergies = allergies
+                    patientRecord.pregnancyStatus = pregnancyStatus
+                    patientRecord.insurancePlanName = insurancePlanName
+                    patientRecord.insurancePlanNumber = insurancePlanNumber
+                    patientRecord.isDiabetic = isDiabetic
+                    patientRecord.previousSurgery = previousSurgery
+                    patientRecord.status = status
+                    patientRecord.save()
+                except Exception as e:
+                    print(e)
+                    return render(request, 'patientRecord.html',{'message':'Something went Wrong'})
+                finally:
+                    return render(request, 'patientRecord.html',{'success':True})
+                
+            else:
+                return render(request, 'patientRecord.html')
+    # else:
+    #         return redirect('/')
 
