@@ -113,6 +113,16 @@
                                 <h3 class="register-heading">Register a Patient</h3>
                                 <form action="newPatient" method="post">{% csrf_token %}
                                     <div class="row register-form">
+                                        {% if success %}
+                                            <div class="alert alert-success" role="alert">
+                                                Patient Successfully registered <a href="#" class="alert-link">Click here</a>. to add his medical detail.
+                                            </div>
+                                        {% endif %}
+                                        {% if message %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{message}}
+                                            </div>
+                                        {% endif %}
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" name="name" placeholder="Name *" value="" />
@@ -120,9 +130,9 @@
                                             <div class="form-group">
                                                 <select class="form-control" name="gender">
                                                     <option class="hidden"  selected disabled>Gender</option>
-                                                    <option value="1">Male</option>
-                                                    <option value="2">Female</option>
-                                                    <option value="3">Other</option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                    <option value="Other">Other</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -141,14 +151,14 @@
                                             <div class="form-group">
                                                 <select class="form-control" name="bloodGroup">
                                                     <option class="hidden"  selected disabled>Blood Group</option>
-                                                    <option value="1">A+</option>
-                                                    <option value="2">B+</option>
-                                                    <option value="3">O+</option>
-                                                    <option value="4">AB+</option>
-                                                    <option value="5">A-</option>
-                                                    <option value="6">B-</option>
-                                                    <option value="7">O-</option>
-                                                    <option value="8">AB-</option>
+                                                    <option value="A+">A+</option>
+                                                    <option value="B+">B+</option>
+                                                    <option value="O+">O+</option>
+                                                    <option value="AB+">AB+</option>
+                                                    <option value="A-">A-</option>
+                                                    <option value="B-">B-</option>
+                                                    <option value="O-">O-</option>
+                                                    <option value="AB-">AB-</option>
                                                 </select>
                                             </div>
                                             <input type="submit" class="btnRegister"  value="Register"/>
@@ -160,5 +170,4 @@
                         </div>
                     </div>
                 </div>
-
             </div>
