@@ -4,4 +4,5 @@ from healthcare import views
 
 urlpatterns = [
     path('/newPatient', views.newPatient, name='newPatient'),
+    path('/patientRecord/<int:patientId>', views.patientRecord, name='patientRecord'),
 ]
