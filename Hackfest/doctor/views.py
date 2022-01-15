@@ -7,100 +7,58 @@ import uuid
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
+from .models import Prescription, PrescribedMedicine, Medicine
+from healthcare.models import Patient, PatientRecord
 
 
-# Create your views here.
-def choiseview(request):
-    try:
-        return render(request, 'choise.html' )
-    except:
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+# Patient List
+def patientList(request):
+    data = Patient.objects.all()
+    return render(request, "patientlist.html", {'data':data})   
 
+# Patient Detail
+def patientRecord(request, id):
+    print(id)
+    history = PatientRecord.objects.get(id=id)
+    print(history.Allergies)
+    details = Patient.objects.get(pk=id)
+    print(details.gender)
+    
+    return render(request, "patientrecord.html", {'history':history, 'details':details}) 
 
-def doctor_register(request, roleid):
-    try:
-        if request.method =='POST':
-            uname=request.POST.get('uname',None)
-            email=request.POST.get('eml',None)
-            pwd=request.POST.get('pwd',None)
-            if User.objects.filter(username=uname).exists():
+#def doctorLogin(request):
+    #return render(request, "doctor.html")  
+# Adding Prescription
+def makeprescriptions(request):
+    if request.method == 'POST':
+        patientId = request.session.get('id')
+        patient = Patient.objects.get(patientId=patientId)
+        prescriptionsDate = request.POST["date"]
+        priscription = Prescription(prescriptionIssueDate=prescriptionsDate,prescriptionPatient=patient)
+        priscription.save()
+        return render(request, "",{"data":priscription})
 
-                return HttpResponse("User already available")
-            else:
-                role_data=role.objects.get(role_id= roleid)
-                user_obj=User.objects.create(username=uname,password=pwd,email=email)
-                user_obj.set_password(pwd)
-                user_obj.save()
-                roletable= Userrolemap.objects.create(user_id=user_obj, role_id=roleid)
-                roletable.save()
-                messages=role_data.role
-                return render (request, 'dummy.html', {"messages": messages} )
-                
-                
-        return render(request, 'ragister.html')    
-    except:
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+# Add medcine on Prescription
+def addMedicineOnPrescription(request):
+    if request.method=="POST":
+        prescribedMedicineDuration=request.POST['prescribedMedicineDuration']
+        prescribedMedicineMedicine=request.POST['medicineId']
+        prescribedMedicineQuantity=request.POST['prescribedMedicineQuantity']
+        prescribedMedicineTakenQuantity=request.POST['prescribedMedicineTakenQuantity']
+        prescribedMedicinePrescription=request.POST['prescriptionId']
+        prescribedMedicineDiagnosis= request.POST['prescriptionDiagnosis']
+        medicine = Medicine.objects.get(medicineId=prescribedMedicineMedicine)
+        prescription = Prescription.objects.get(prescriptionId=prescribedMedicinePrescription)
 
-def addNurse(request):
-    try:
-        data={'roleid': 2 , 'message': "Add Nurse !!!"}
-
-        return  render(request, 'ragister.html', context= data )
-    except:
-        return HttpResponse("<h1>something went wrong!!!</h1>")
-def addDoctor(request):
-    try:
-        data={'roleid': 1 , 'message': "Add Doctor!!!"}
-        return  render(request, 'ragister.html', context= data )
-    except:
-        return HttpResponse("<h1>something went wrong!!!</h1>")
-
-def docter_login(request):
-    try:    
-        if request.method =='POST':
-            uname=request.POST.get('uname',None)
-            pwd=request.POST.get('pwd',None)
-            ubj= authenticate(request,username=uname,password=pwd) 
-
-            q = User.objects.filter(username=uname).filter(is_staff=True)
-            if q and ubj:
-
-                return redirect("choise/" )
-
-
+        prescribedMedicine = PrescribedMedicine(prescribedMedicineDuration=prescribedMedicineDuration,prescribedMedicineMedicine=medicine,prescribedMedicineQuantity=prescribedMedicineQuantity,prescribedMedicineTakenQuantity=prescribedMedicineTakenQuantity,prescribedMedicineDiagnosis=prescribedMedicineDiagnosis,prescribedMedicinePrescription=prescription)
+        prescribedMedicine.save()
         
-            elif ubj:
-                object=Userrolemap.objects.filter(user_id=ubj).filter(role_id=2)
-                if object:
-                    messages="username taken thank you!!!"
-                    return HttpResponse("hello nurse")
-                else:
-                    return HttpResponse('Hello Doctor')
-
-            else:
-                
-                messages="Please enter valid details!!!"
-                return render( request, 'index.html', {"messages": messages})
-
-        else:
-            
-
-            return render(request, 'index.html')
-    except:
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+        return HttpResponse("added")
+    return render(request, 'addprescription.html')    
 
 
-
-
-
-
-def doctor_logout(request):
-    try:
-        del request.session['uid']
-        return redirect('/doctor/loginpage')
-    except:
-        return HttpResponse("<h3>Somthing is wrong !!!!!</h3>")
-
-
-
+# See Prescription
+def seePrescription(request):
+    patientId = request.session.get('id')
+    return render(request, "Patient/patient_prescription.html")
 
