@@ -103,15 +103,15 @@
                 <div class="row">
                     <div class="col-md-3 register-left">
                         <img src="http://www.downloadclipart.net/large/37802-red-stethoscope-clipart.png" alt=""/>
-                        <h3>Patient Details</h3>
+                        <h3>Update Patient Details</h3>
                         <p>The art of medicine consists of amusing the patient while nature cures the disease.</p>
                         <input type="submit" name="" value="Cancel"/><br/>
                     </div>
                     <div class="col-md-9 register-right">
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <h3 class="register-heading">{{patient.name}}</h3>
-                                <form action="/healthcare/patientRecord/{{patientId}}" method="post">{% csrf_token %}
+                                <h3 class="register-heading">{{ profile.name }}</h3>
+                                <form action="/healthcare/updatePatientRecord/{{profile.id}}" method="post">{% csrf_token %}
                                     <div class="row register-form">
                                         <div class="col-md-12">
                                             {% if success %}
@@ -128,46 +128,82 @@
                                         
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="number" class="form-control" name="height" placeholder="Height *" value="" />
+                                                <p>Height</p>
+                                                <input type="number" class="form-control" name="height" placeholder="Height *" value={{ patient.height }} />
                                             </div>
                                             <div class="form-group">
-                                                <input type="number" class="form-control" name="weight" placeholder="Weight *" value="" />
+                                                <p>Weight</p>
+                                                <input type="number" class="form-control" name="weight" placeholder="Weight *" value={{ patient.weight }} />
                                             </div>
-                                            {% if patient.gender == "Female" %}
+
+                                            {% if profile.gender == "Female" %}
+                                                <p>Pregnancy Status</p>
                                                 <div class="form-group">
                                                     <select class="form-control" name="pregnancyStatus">
                                                         <option class="hidden"  selected disabled>Pregnancy Status</option>
-                                                        <option value="Yes">Yes</option>
-                                                        <option value="No">No</option>
+                                                        {% if patient.pregnancyStatus == "Yes" %}
+                                                            <option value="Yes" selected>Yes</option>
+                                                            <option value="No">No</option>
+                                                        {% elif patient.pregnancyStatus == "No" %}
+                                                            <option value="Yes">Yes</option>
+                                                            <option value="No" selected>No</option>
+                                                        {% else %}
+                                                            <option value="Yes">Yes</option>
+                                                            <option value="No">No</option>    
+                                                        {% endif %}
+                                                        
+                                                        
                                                     </select>
                                                 </div>
                                             {% endif %}
                                             <div class="form-group">
-                                                <textarea class="form-control" name="allergies" placeholder="Allergies *" rows="5" value="" ></textarea>
+                                                <p>Allergies</p>
+                                                <textarea class="form-control" name="allergies" placeholder="Allergies" rows="5" value='' >{{ patient.allergies }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
+                                                <p>Diabetic</p>
                                                 <select class="form-control" name="isDiabetic">
                                                     <option class="hidden"  selected disabled>Diabetic</option>
-                                                    <option value="Yes">Yes</option>
-                                                    <option value="No">No</option>
+                                                    {% if patient.isDiabetic == "Yes" %}
+                                                        <option value="Yes" selected>Yes</option>
+                                                        <option value="No">No</option>
+                                                    {% elif patient.isDiabetic == "No" %}
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No" selected>No</option>
+                                                    {% else %}
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>    
+                                                    {% endif %}
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="insurancePlanName" placeholder="Insurance Plan Name*" value="" />
+                                                <p>Insurance Plan Name</p>
+                                                <input type="text" class="form-control" name="insurancePlanName" placeholder="Insurance Plan Name*" value={{ patient.insurancePlanName }} />
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="insurancePlanNumber" placeholder="Insurance Number*" value="" />
+                                                <p>Insurance Plan Number</p>
+                                                <input type="text" class="form-control" name="insurancePlanNumber" placeholder="Insurance Number*" value={{ patient.insurancePlanNumber }} />
                                             </div>
                                             <div class="form-group">
-                                                <textarea class="form-control" name="previousSurgery" placeholder="Any Previous Surgery *" rows="5" value="" ></textarea>
+                                                <p>Any Previous Surgery</p>
+                                                <textarea class="form-control" name="previousSurgery" placeholder="Any Previous Surgery" rows="5" value='' >{{ patient.previousSurgery }}</textarea>
                                             </div>
                                             <div class="form-group">
+                                                <p>Status</p>
                                                 <select class="form-control" name="status">
                                                     <option class="hidden"  selected disabled>Status</option>
-                                                    <option value="Recovered">Recovered</option>
-                                                    <option value="Under Treatment">Under Treatment</option>
+                                                    {% if patient.status == "Recovered" %}
+                                                        <option value="Recovered" selected>Recovered</option>
+                                                        <option value="Under Treatment">Under Treatment</option>
+                                                    {% elif patient.status == "Under Treatment" %}
+                                                        <option value="Recovered">Recovered</option>
+                                                        <option value="Under Treatment" selected>Under Treatment</option>
+                                                    {% else %}
+                                                        <option value="Recovered">Recovered</option>
+                                                        <option value="Under Treatment">Under Treatment</option>    
+                                                    {% endif %}
                                                 </select>
                                             </div>
                                             <input type="submit" class="btnRegister"  value="Register"/>
