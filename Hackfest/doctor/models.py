@@ -45,10 +45,10 @@ class Profile(models.Model):
     forgot_password_token= models.CharField(max_length=100)
     created_at= models.DateTimeField(auto_now_add=True)
     
-    def __str__(self)
+    def __str__(self):
         return self.user.username
 
-<<<<<<< HEAD
+
 class Userrolemap(models.Model):
     user_id =models.ForeignKey(User, on_delete=models.CASCADE)
     role_id= models.IntegerField(null=True, blank=False)
@@ -62,15 +62,3 @@ class role(models.Model):
 
 
    
-=======
-
-class Roles(models.Model):
-  USER_TYPE_CHOICES = (
-      (1, 'doctor'),
-      (2, 'staff'),
-      (3,'admin'),
-  )
-  user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
-  user=models.OneToOneField(User, on_delete=models.CASCADE)
-    
->>>>>>> 5532b48fda7a1870d6b266aa7ac745f18b2ea023

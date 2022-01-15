@@ -50,15 +50,7 @@ def patientRecord(request):
                 return render(request, 'newPatient.html')
     # else:
     #         return redirect('/')
-
-<<<<<<< HEAD
-
-
-
-def newPatient(request):
-=======
 def patientRecord(request, patientId):
->>>>>>> 5532b48fda7a1870d6b266aa7ac745f18b2ea023
     # if request.session.has_key('uid'):
             if request.method == 'POST':
                 try:
