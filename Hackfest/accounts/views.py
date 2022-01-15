@@ -2,8 +2,8 @@ from django.core.checks import messages
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, response
 from django.contrib.auth.models import User
-from .helpers import *
 import uuid
+from doctor.models import *
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
@@ -23,11 +23,13 @@ def doctor_register(request, roleid):
             uname=request.POST.get('uname',None)
             email=request.POST.get('eml',None)
             pwd=request.POST.get('pwd',None)
+
             if User.objects.filter(username=uname).exists():
 
                 return HttpResponse("User already available")
             else:
                 role_data=role.objects.get(role_id= roleid)
+                print(role_data.role)
                 user_obj=User.objects.create(username=uname,password=pwd,email=email)
                 user_obj.set_password(pwd)
                 user_obj.save()
@@ -43,14 +45,14 @@ def doctor_register(request, roleid):
 
 def addNurse(request):
     try:
-        data={'roleid': 2 , 'message': "Add Nurse !!!"}
+        data={'roleid': 2 , 'message': "Nurse login!!!"}
 
         return  render(request, 'ragister.html', context= data )
     except:
         return HttpResponse("<h1>something went wrong!!!</h1>")
 def addDoctor(request):
     try:
-        data={'roleid': 1 , 'message': "Add Doctor!!!"}
+        data={'roleid': 1 , 'message': "Doctor login!!!"}
         return  render(request, 'ragister.html', context= data )
     except:
         return HttpResponse("<h1>something went wrong!!!</h1>")
