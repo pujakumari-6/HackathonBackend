@@ -7,6 +7,8 @@ from django.core.mail import send_mail
 import uuid
 from django.conf import settings
 # Create your views here.
+
+# register patient
 def newPatient(request):
     # if request.session.has_key('uid'):
             if request.method == 'POST':
@@ -55,6 +57,7 @@ def newPatient(request):
     # else:
     #         return redirect('/')
 
+# Create new patient record
 def patientRecord(request, patientId):
     # if request.session.has_key('uid'):
             patient = Patient.objects.filter(id=patientId).first()
@@ -93,14 +96,11 @@ def patientRecord(request, patientId):
     # else:
     #         return redirect('/')
 
-
+# update patient record
 def updatePatientRecord(request, patientId):
     # if request.session.has_key('uid'):
-            print('First')
             patientP = Patient.objects.filter(id=patientId).first()
-            print('Second')
             patient = PatientRecord.objects.filter(patientId=patientId)
-            print('Third')
             if len(patient) == 0:
                 return render(request, 'patientRecord.html',{'message':'Patient desnot exist!'})
             patientRecord = patient.first()
