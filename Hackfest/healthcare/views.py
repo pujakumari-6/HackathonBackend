@@ -6,7 +6,7 @@ from healthcare.models import Patient, PatientRecord
 from django.core.mail import send_mail
 import uuid
 # Create your views here.
-def patientRecord(request):
+def newPatient(request):
     # if request.session.has_key('uid'):
             if request.method == 'POST':
                 try:
