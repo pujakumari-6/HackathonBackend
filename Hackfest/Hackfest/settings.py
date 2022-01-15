@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'healthcare',
-    'doctor'
+    'doctor',
 ]
 
 MIDDLEWARE = [
@@ -133,7 +133,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
-
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'innovativehealthcaregroupk@gmail.com'
 EMAIL_HOST_PASSWORD = 'Group@kProject'
