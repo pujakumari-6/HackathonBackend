@@ -99,13 +99,18 @@
     color: #495057;
 }
 </style>
+<script>
+    function cancel(){
+        window.location.href="/doctor";  
+    }
+</script>
 <div class="container register">
                 <div class="row">
                     <div class="col-md-3 register-left">
                         <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
                         <h3>Welcome</h3>
                         <p>The art of medicine consists of amusing the patient while nature cures the disease.</p>
-                        <input type="submit" name="" value="Cancel"/><br/>
+                        <input type="submit" name="" value="Cancel" onclick="cancel()"/><br/>
                     </div>
                     <div class="col-md-9 register-right">
                         <div class="tab-content" id="myTabContent">
@@ -116,7 +121,7 @@
                                         <div class="col-md-12">
                                             {% if success %}
                                             <div class="alert alert-success" role="alert">
-                                                Patient Successfully registered <a href="#" class="alert-link">Click here</a>. to add his medical detail.
+                                                Patient Successfully registered <a href="/healthcare/patientRecord/{{patientId}}" class="alert-link">Click here</a> to add his medical detail.
                                             </div>
                                             {% endif %}
                                             {% if message %}

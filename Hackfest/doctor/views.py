@@ -2,7 +2,6 @@ from django.core.checks import messages
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, response
 from django.contrib.auth.models import User
-from .helpers import *
 import uuid
 from django.contrib import messages
 from .models import *
@@ -10,6 +9,8 @@ from django.contrib.auth import authenticate
 from .models import Prescription, PrescribedMedicine, Medicine
 from healthcare.models import Patient, PatientRecord
 
+def doctorHome(request):
+    return render(request, "doctor.html", {})   
 
 # Patient List
 def patientList(request):
@@ -18,13 +19,13 @@ def patientList(request):
 
 # Patient Detail
 def patientRecord(request, id):
-    print(id)
-    history = PatientRecord.objects.get(id=id)
-    print(history.Allergies)
-    details = Patient.objects.get(pk=id)
-    print(details.gender)
-    
-    return render(request, "patientrecord.html", {'history':history, 'details':details}) 
+    history = PatientRecord.objects.filter(id=id)
+    details = Patient.objects.filter(pk=id).first()
+    if(len(history) !=0):
+        patientHistory = history.first()
+        return render(request, "patientrecord.html", {'history':patientHistory, 'details':details}) 
+    else:
+        return render(request, "patientrecord.html", {'history':'', 'details':details})
 
 #def doctorLogin(request):
     #return render(request, "doctor.html")  

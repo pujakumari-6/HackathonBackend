@@ -170,9 +170,9 @@ input {
 }
 
 .overlay {
-	background: #FF416C;
-	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-	background: linear-gradient(to right, #FF4B2B, #FF416C);
+	background: #16a085;
+	background: -webkit-linear-gradient(to right, #16a085, #65e4ca);
+	background: linear-gradient(to right, #16a085, #65e4ca);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -253,7 +253,7 @@ footer p {
 }
 
 footer i {
-    color: red;
+    color: #16a085;
 }
 
 footer a {
@@ -268,11 +268,8 @@ footer a {
   <div class="container" id="container">
 
     <div class="form-container sign-in-container">
-      <form action="/doctor/checkusercheck/{{roleid}}" method="post">
-		
+      <form action="/accounts/checkusercheck/{{roleid}}" method="post">
         {% csrf_token %}
-        
-        
         <input type="text" placeholder="Name" name="uname" />
         <input type="email" placeholder="Email" name='eml'/>
         <input id="password" type="password" placeholder="Password" name='pwd' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
@@ -289,7 +286,7 @@ footer a {
           <button class="ghost" id="signIn">Sign In</button>
         </div>
         <div class="overlay-panel overlay-right">
-          <h1>Hello, Admin!</h1>
+          <h1>Welcome</h1>
 		  <h3 style="color: white">{{message}}</h3>
         </div>
       </div>
