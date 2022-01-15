@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-{%load static%}
+
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -55,8 +56,8 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #16a085;
-	background-color: #16a085;
+	border: 1px solid #FF4B2B;
+	background-color: #FF4B2B;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -169,9 +170,9 @@ input {
 }
 
 .overlay {
-	background: #16a085;
-	background: -webkit-linear-gradient(to right, #16a085, #16a085);
-	background: linear-gradient(to right, #16a085, #16a085);
+	background: #FF416C;
+	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+	background: linear-gradient(to right, #FF4B2B, #FF416C);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -224,7 +225,6 @@ input {
 	margin: 20px 0;
 }
 
-
 .social-container a {
 	border: 1px solid #DDDDDD;
 	border-radius: 50%;
@@ -260,49 +260,36 @@ footer a {
     color: #3c97bf;
     text-decoration: none;
 }
-
  </style>   
 </head>
 <body>
 
   <div class="container" id="container">
-    <div class="form-container sign-up-container">
-      <form action="loginpage" method="post">
-        {% csrf_token %}
-		
 
-
-        <h1>Sign in</h1>
-       
-        <input type='text' placeholder="username" name='uname'>
-        <input type="password" placeholder="Password" name='pwd'  />
-        <a href="forgot">Forgot your password?</a>
-        <button>Sign In</button>
-      
-      </form>
-      {% csrf_token %}
-
-    </div>
     <div class="form-container sign-in-container">
-      <div class="newclass">
-      <img  src="{% static 'Doctor.jpg' %}"  alt="Doctor image"  >
-    </div>
-     
+      <form action="/doctor/checkusercheck/{{roleid}}" method="post">
+		
+        {% csrf_token %}
+        
+        
+        <input type="text" placeholder="Name" name="uname" />
+        <input type="email" placeholder="Email" name='eml'/>
+        <input type="password" placeholder="Password" name='pwd' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+        <input type="password" placeholder="re-enter password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+
+        <button>Sign Up</button>
+      </form>
     </div>
     <div class="overlay-container">
       <div class="overlay">
         <div class="overlay-panel overlay-left">
-			<div>
-			</div>
           <h1>Welcome Back!</h1>
           <p>To keep connected with us please login with your personal info</p>
-          <!-- <button class="ghost" id="signIn">Sign In</button> -->
+          <button class="ghost" id="signIn">Sign In</button>
         </div>
         <div class="overlay-panel overlay-right">
-			
-          <h1>{{messages}}</h1>
-          <p>Enter your personal details and start journey with us</p>
-          <button class="ghost" id="signUp">Sign in</button>
+          <h1>Hello, Admin!</h1>
+		  <h3 style="color: white">{{message}}</h3>
         </div>
       </div>
     </div>
@@ -317,17 +304,5 @@ footer a {
     </p>
   </footer>      
 </body>
-<script>
-const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
-const container = document.getElementById('container');
 
-signUpButton.addEventListener('click', () => {
-	container.classList.add("right-panel-active");
-});
-
-signInButton.addEventListener('click', () => {
-	container.classList.remove("right-panel-active");
-});
-</script>
 </html>

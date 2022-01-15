@@ -55,8 +55,6 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #16a085;
-	background-color: #16a085;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -169,9 +167,8 @@ input {
 }
 
 .overlay {
-	background: #16a085;
-	background: -webkit-linear-gradient(to right, #16a085, #16a085);
-	background: linear-gradient(to right, #16a085, #16a085);
+	background: -webkit-linear-gradient(to right, white,  white);
+	background: linear-gradient(to right, white, white);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -260,6 +257,12 @@ footer a {
     color: #3c97bf;
     text-decoration: none;
 }
+.class12{
+  background-image: url("nerse.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+}
 
  </style>   
 </head>
@@ -267,42 +270,28 @@ footer a {
 
   <div class="container" id="container">
     <div class="form-container sign-up-container">
-      <form action="loginpage" method="post">
-        {% csrf_token %}
-		
-
-
-        <h1>Sign in</h1>
-       
-        <input type='text' placeholder="username" name='uname'>
-        <input type="password" placeholder="Password" name='pwd'  />
-        <a href="forgot">Forgot your password?</a>
-        <button>Sign In</button>
       
-      </form>
-      {% csrf_token %}
-
     </div>
     <div class="form-container sign-in-container">
       <div class="newclass">
-      <img  src="{% static 'Doctor.jpg' %}"  alt="Doctor image"  >
     </div>
-     
+    <div style="padding-top: 70%; padding-left: 20%;">  
+    <button class="ghost" id="signUp" style="border-color: black; color:black;  " ><a href="createnurse/">Create Nurse</a></button>
+</div>
     </div>
-    <div class="overlay-container">
+    <div class="overlay-container class12  " >
       <div class="overlay">
         <div class="overlay-panel overlay-left">
+            
 			<div>
 			</div>
-          <h1>Welcome Back!</h1>
-          <p>To keep connected with us please login with your personal info</p>
+          
           <!-- <button class="ghost" id="signIn">Sign In</button> -->
         </div>
-        <div class="overlay-panel overlay-right">
+        <div class="overlay-panel overlay-right " style="background-image: url('');">
 			
-          <h1>{{messages}}</h1>
           <p>Enter your personal details and start journey with us</p>
-          <button class="ghost" id="signUp">Sign in</button>
+          <button class="ghost " id="signUp" style="border-color: black; color:black; "><a href='createdoctor/'>Create Doctor</a> </button>
         </div>
       </div>
     </div>
@@ -311,9 +300,8 @@ footer a {
   <footer>
     <p>
       Created with <i class="fa fa-heart"></i> by
-      <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
-      - Read how I created this and how you can join the challenge
-      <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+      <a target="_blank" href="https://florin-pop.com">
+        <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
     </p>
   </footer>      
 </body>
@@ -322,12 +310,3 @@ const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
 
-signUpButton.addEventListener('click', () => {
-	container.classList.add("right-panel-active");
-});
-
-signInButton.addEventListener('click', () => {
-	container.classList.remove("right-panel-active");
-});
-</script>
-</html>

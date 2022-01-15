@@ -54,7 +54,6 @@ def newPatient(request):
                 return render(request, 'newPatient.html')
     # else:
     #         return redirect('/')
-
 def patientRecord(request, patientId):
     # if request.session.has_key('uid'):
             patient = Patient.objects.filter(id=patientId).first()
