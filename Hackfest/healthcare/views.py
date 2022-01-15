@@ -5,14 +5,18 @@ import random
 from healthcare.models import Patient, PatientRecord
 from django.core.mail import send_mail
 import uuid
+from django.conf import settings
 # Create your views here.
-def patientRecord(request):
+def newPatient(request):
     # if request.session.has_key('uid'):
             if request.method == 'POST':
                 try:
                     name = request.POST['name']
                     mobile = request.POST['mobile']
                     email = request.POST['email']
+                    patient = Patient.objects.filter(email=email)
+                    if len(patient) != 0:
+                        return render(request, 'newPatient.html',{'message':'Patient already exists'})
                     gender = request.POST['gender']
                     dateOfBirth = request.POST['dateOfBirth']
                     bloodGroup = request.POST['bloodGroup']
@@ -34,10 +38,10 @@ def patientRecord(request):
                         subject='Registered to Innovative Healthcare',
                         message='',
                         html_message=f'''Hi {name}, <br><br>
-                    Thank you for being part of Innovative healthcare.<br> Use the following registration id to view you prescription history<br><br>
-                    {registrationNumber}<br>
-                    Team PSCSocial''',
-                        from_email='Innovative Healthcare',
+                    Thank you for being part of Innovative healthcare.<br> Use the following registration id to view you prescription history<br>
+                    <b>{registrationNumber}</b><br><br>Regards<br>
+                    Innovative Healthcare''',
+                        from_email=settings.EMAIL_HOST_USER,
                         recipient_list=[email]
                     )
                 except Exception as e:
@@ -53,21 +57,23 @@ def patientRecord(request):
 
 def patientRecord(request, patientId):
     # if request.session.has_key('uid'):
+            patient = Patient.objects.filter(id=patientId).first()
             if request.method == 'POST':
                 try:
-                    pId = patientId
+                    patientRecord = PatientRecord.objects.filter(patientId=patientId)
+                    if len(patientRecord) != 0:
+                        return render(request, 'patientRecord.html',{'message':'Patient record already exists'})
                     height = request.POST['height']
                     weight = request.POST['weight']
                     allergies = request.POST['allergies']
                     pregnancyStatus = request.POST['pregnancyStatus']
-                    insurancePlanName = request.POST['insurancePlanName']
                     isDiabetic = request.POST['isDiabetic']
                     insurancePlanName = request.POST['insurancePlanName']
                     insurancePlanNumber = request.POST['insurancePlanNumber']
                     previousSurgery = request.POST['previousSurgery']
                     status = request.POST['status']
                     patientRecord = PatientRecord()
-                    patientRecord.patientId = pId
+                    patientRecord.patientId = patient
                     patientRecord.height = height
                     patientRecord.weight = weight
                     patientRecord.allergies = allergies
@@ -78,14 +84,52 @@ def patientRecord(request, patientId):
                     patientRecord.previousSurgery = previousSurgery
                     patientRecord.status = status
                     patientRecord.save()
+                    return render(request, 'patientRecord.html',{'patient':patient,'success':True,'patientId':patientId})
                 except Exception as e:
                     print(e)
-                    return render(request, 'patientRecord.html',{'message':'Something went Wrong'})
-                finally:
-                    return render(request, 'patientRecord.html',{'success':True})
-                
+                    return render(request, 'patientRecord.html',{'patient':patient,'message':'Something went Wrong','patientId':patientId})
             else:
-                return render(request, 'patientRecord.html')
+                return render(request, 'patientRecord.html', {'patient':patient,'patientId':patientId})
     # else:
     #         return redirect('/')
 
+
+def updatePatientRecord(request, patientId):
+    # if request.session.has_key('uid'):
+            print('First')
+            patientP = Patient.objects.filter(id=patientId).first()
+            print('Second')
+            patient = PatientRecord.objects.filter(patientId=patientId)
+            print('Third')
+            if len(patient) == 0:
+                return render(request, 'patientRecord.html',{'message':'Patient desnot exist!'})
+            patientRecord = patient.first()
+            if request.method == 'POST':
+                try:
+                    height = request.POST['height']
+                    weight = request.POST['weight']
+                    allergies = request.POST['allergies']
+                    pregnancyStatus = request.POST['pregnancyStatus']
+                    isDiabetic = request.POST['isDiabetic']
+                    insurancePlanName = request.POST['insurancePlanName']
+                    insurancePlanNumber = request.POST['insurancePlanNumber']
+                    previousSurgery = request.POST['previousSurgery']
+                    status = request.POST['status']
+                    patientRecord.height = height
+                    patientRecord.weight = weight
+                    patientRecord.allergies = allergies
+                    patientRecord.pregnancyStatus = pregnancyStatus
+                    patientRecord.insurancePlanName = insurancePlanName
+                    patientRecord.insurancePlanNumber = insurancePlanNumber
+                    patientRecord.isDiabetic = isDiabetic
+                    patientRecord.previousSurgery = previousSurgery
+                    patientRecord.status = status
+                    patientRecord.save()
+                    return render(request, 'updatePatientRecord.html',{'patient':patientRecord,'success':True,'profile':patientP})
+                except Exception as e:
+                    print(e)
+                    return render(request, 'updatePatientRecord.html',{'patient':patientRecord,'message':'Something went Wrong','profile':patientP})
+            else:
+                return render(request, 'updatePatientRecord.html', {'patient':patientRecord,'profile':patientP})
+    # else:
+    #         return redirect('/')

@@ -113,16 +113,18 @@
                                 <h3 class="register-heading">Register a Patient</h3>
                                 <form action="newPatient" method="post">{% csrf_token %}
                                     <div class="row register-form">
-                                        {% if success %}
+                                        <div class="col-md-12">
+                                            {% if success %}
                                             <div class="alert alert-success" role="alert">
                                                 Patient Successfully registered <a href="#" class="alert-link">Click here</a>. to add his medical detail.
                                             </div>
-                                        {% endif %}
-                                        {% if message %}
-                                            <div class="alert alert-danger" role="alert">
-                                                {{message}}
-                                            </div>
-                                        {% endif %}
+                                            {% endif %}
+                                            {% if message %}
+                                                <div class="alert alert-danger" role="alert">
+                                                    {{message}}
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" name="name" placeholder="Name *" value="" />
