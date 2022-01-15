@@ -13,9 +13,7 @@
 
     <!--Only for demo purpose - no need to add.-->
     
-    <script>
-        
-        
+    <script>   
         function myFunction2(){
           var x = document.getElementById("table2");
           if (x.style.display==="none"){
@@ -24,7 +22,6 @@
           else{
             x.style.display="none";
           }
-
         }
         function myFunction3(){
           var x = document.getElementById("table3");
@@ -122,15 +119,17 @@
                                   <td width="2%">:</td>
                                   <td>{{history.allergies}}</td>
                                 </tr>
-                                <tr id="Pregnancy">
+                                {% if details.gender == "Female" %}
+                                  <tr id="Pregnancy">
                                     <th width="30%">Pregnancy Status</th>
                                     <td width="2%">:</td>
                                     <td>{{history.pregnancyStatus}}</td>
-                                </tr>
+                                  </tr>
+                                {% endif %}
                                 <tr>
                                   <th width="30%">Previous Surgeries</th>
                                   <td width="2%">:</td>
-                                  <td>{{hostory.previousSurgery}}</td>
+                                  <td>{{ history.previousSurgery }}</td>
                                 </tr>
                                 <tr>
                                   <th width="30%">Is_Diabetic</th>

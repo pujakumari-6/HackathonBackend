@@ -99,13 +99,18 @@
     color: #495057;
 }
 </style>
+<script>
+    function cancel(){
+        window.location.href="/doctor";  
+    }
+</script>
 <div class="container register">
                 <div class="row">
                     <div class="col-md-3 register-left">
                         <img src="http://www.downloadclipart.net/large/37802-red-stethoscope-clipart.png" alt=""/>
                         <h3>Patient Details</h3>
                         <p>The art of medicine consists of amusing the patient while nature cures the disease.</p>
-                        <input type="submit" name="" value="Cancel"/><br/>
+                        <input type="submit" name="" value="Cancel" onClick="cancel()"/><br/>
                     </div>
                     <div class="col-md-9 register-right">
                         <div class="tab-content" id="myTabContent">
@@ -114,11 +119,6 @@
                                 <form action="/healthcare/patientRecord/{{patientId}}" method="post">{% csrf_token %}
                                     <div class="row register-form">
                                         <div class="col-md-12">
-                                            {% if success %}
-                                            <div class="alert alert-success" role="alert">
-                                                Records added successfully.
-                                            </div>
-                                        {% endif %}
                                         {% if message %}
                                             <div class="alert alert-danger" role="alert">
                                                 {{message}}
