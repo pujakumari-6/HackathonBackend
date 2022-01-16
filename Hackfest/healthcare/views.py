@@ -64,10 +64,10 @@ def patientRecord(request, patientId):
                     weight = request.POST['weight']
                     allergies = request.POST['allergies']
                     pregnancyStatus = request.POST.get('pregnancyStatus', None)
-                    if request.POST['estimatedDelivery'] == '':
+                    if request.POST.get('estimatedDelivery', None) == None:
                         estimatedDelivery = None
                     else:
-                        estimatedDelivery = request.POST['estimatedDelivery']
+                        estimatedDelivery = request.POST.get('estimatedDelivery', None)
                     bloodPressure = request.POST['bloodPressure']
                     pulseRate = request.POST['pulseRate']
                     bodyTemprature = request.POST['bodyTemprature']
@@ -96,7 +96,7 @@ def patientRecord(request, patientId):
                     patientRecord.previousSurgery = previousSurgery
                     patientRecord.status = status
                     patientRecord.save()
-                    return redirect('doctor/patient-list')
+                    return redirect('/doctor/patient-list')
                 # except Exception as e:
                 #     print(e)
                 #     return render(request, 'patientRecord.html',{'patient':patient,'message':'Something went Wrong','patientId':patientId})
@@ -114,29 +114,47 @@ def updatePatientRecord(request, patientId):
                 return render(request, 'patientRecord.html',{'message':'Patient desnot exist!'})
             patientRecord = patient.first()
             if request.method == 'POST':
-                try:
+                # try:
                     height = request.POST['height']
                     weight = request.POST['weight']
                     allergies = request.POST['allergies']
-                    pregnancyStatus = request.POST['pregnancyStatus']
-                    isDiabetic = request.POST['isDiabetic']
+                    pregnancyStatus = request.POST.get('pregnancyStatus', None)
+                    if request.POST.get('estimatedDelivery', None) == None:
+                        estimatedDelivery = None
+                    else:
+                        estimatedDelivery = request.POST.get('estimatedDelivery', None)
+                    bloodPressure = request.POST['bloodPressure']
+                    pulseRate = request.POST['pulseRate']
+                    bodyTemprature = request.POST['bodyTemprature']
+                    isAlcolohic = request.POST.get('isAlcolohic',None)
+                    isSmoker = request.POST.get('isSmoker',None)
+                    isDiabetic = request.POST.get('isDiabetic',None)
                     insurancePlanName = request.POST['insurancePlanName']
                     insurancePlanNumber = request.POST['insurancePlanNumber']
                     previousSurgery = request.POST['previousSurgery']
                     status = request.POST['status']
+                    patientRecord.patientId = patientP
+                    patientRecord.bloodPressure =bloodPressure
+                    patientRecord.pulseRate = pulseRate
+                    patientRecord.bodyTemprature = bodyTemprature
+                    patientRecord.isAlcolohic = isAlcolohic
+                    patientRecord.isSmoker = isSmoker
                     patientRecord.height = height
                     patientRecord.weight = weight
                     patientRecord.allergies = allergies
                     patientRecord.pregnancyStatus = pregnancyStatus
+                    patientRecord.estimatedDelivery = estimatedDelivery
                     patientRecord.insurancePlanName = insurancePlanName
                     patientRecord.insurancePlanNumber = insurancePlanNumber
                     patientRecord.isDiabetic = isDiabetic
                     patientRecord.previousSurgery = previousSurgery
                     patientRecord.status = status
                     patientRecord.save()
+
                     return render(request, 'updatePatientRecord.html',{'patient':patientRecord,'success':True,'profile':patientP})
-                except Exception as e:
-                    print(e)
+                    
+                # except Exception as e:
+                #     print(e)
                     return render(request, 'updatePatientRecord.html',{'patient':patientRecord,'message':'Something went Wrong','profile':patientP})
             else:
                 return render(request, 'updatePatientRecord.html', {'patient':patientRecord,'profile':patientP})

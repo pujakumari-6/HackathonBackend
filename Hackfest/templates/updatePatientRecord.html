@@ -99,13 +99,27 @@
     color: #495057;
 }
 </style>
+<script>
+    function cancel(){
+        window.location.href="/doctor";  
+    }
+    function isPregnant() {
+        var val = document.getElementById('preg').value;
+        if(val=="Yes"){
+            document.getElementById('pregDate').style.display = "block";
+        }
+        else{
+            document.getElementById('pregDate').style.display = "none";
+        }
+    }
+</script>
 <div class="container register">
                 <div class="row">
                     <div class="col-md-3 register-left">
                         <img src="http://www.downloadclipart.net/large/37802-red-stethoscope-clipart.png" alt=""/>
                         <h3>Update Patient Details</h3>
                         <p>The art of medicine consists of amusing the patient while nature cures the disease.</p>
-                        <input type="submit" name="" value="Cancel"/><br/>
+                        <input type="submit" name="" value="Cancel" onClick="cancel()"/><br/>
                     </div>
                     <div class="col-md-9 register-right">
                         <div class="tab-content" id="myTabContent">
@@ -116,7 +130,7 @@
                                         <div class="col-md-12">
                                             {% if success %}
                                             <div class="alert alert-success" role="alert">
-                                                Records added successfully.
+                                                Records Successfully Updated
                                             </div>
                                         {% endif %}
                                         {% if message %}
@@ -139,7 +153,7 @@
                                             {% if profile.gender == "Female" %}
                                                 <p>Pregnancy Status</p>
                                                 <div class="form-group">
-                                                    <select class="form-control" name="pregnancyStatus">
+                                                    <select class="form-control" name="pregnancyStatus" id="preg" onClick="isPregnant()">
                                                         <option class="hidden"  selected disabled>Pregnancy Status</option>
                                                         {% if patient.pregnancyStatus == "Yes" %}
                                                             <option value="Yes" selected>Yes</option>
@@ -154,6 +168,7 @@
                                                     </select>
                                                 </div>
                                                 {% if patient.pregnancyStatus == "Yes" %}
+                                                    <p>Expected Delivery Date</p>
                                                     <div class="form-group" style="display: none" id="pregDate">
                                                         <input placeholder="Expected Delivery Date*" type="text" name="estimatedDelivery" class="form-control" value={{ patient.allergies }} onfocus="(this.type='date')"
                                                         onblur="(this.type='text')"/>
@@ -165,17 +180,21 @@
                                                 <textarea class="form-control" name="allergies" placeholder="Allergies" rows="5" value='' >{{ patient.allergies }}</textarea>
                                             </div>
                                             <div class="form-group">
+                                                <p>Blood Pressure</p>
                                                 <input type="text" class="form-control" name="bloodPressure" placeholder="Blood Pressure" value={{ patient.bloodPressure }} />
                                             </div>
                                             <div class="form-group">
+                                                <p>Pulse Rate</p>
                                                 <input type="text" class="form-control" name="pulseRate" placeholder="Pulse Rate" value={{ patient.pulseRate }} />
                                             </div>
                                             <div class="form-group">
+                                                <p>Body Temprature</p>
                                                 <input type="text" class="form-control" name="bodyTemprature" placeholder="Body Temprature" value={{ patient.bodyTemprature }} />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
+                                                <p>Alcoholic</p>
                                                 <select class="form-control" name="isAlcolohic">
                                                     <option class="hidden"  selected disabled>Alcoholic</option>
                                                     {% if patient.isAlcolohic == "Yes" %}
@@ -191,6 +210,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
+                                                <p>Smoker</p>
                                                 <select class="form-control" name="isSmoker">
                                                     <option class="hidden"  selected disabled>Smoker</option>
                                                     {% if patient.isSmoker == "Yes" %}
@@ -249,7 +269,7 @@
                                                     {% endif %}
                                                 </select>
                                             </div>
-                                            <input type="submit" class="btnRegister"  value="Register"/>
+                                            <input type="submit" class="btnRegister"  value="Update"/>
                                         </div>
                                     </div>
                                 </form>
