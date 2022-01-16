@@ -24,14 +24,15 @@ def newPatient(request):
                     bloodGroup = request.POST['bloodGroup']
                     uuidNo = str(uuid.uuid4()).replace("-","")[0:10]
                     registrationNumber = name.replace(' ','')+uuidNo+str(random.randint(2345678909800, 9923456789000))[0:5]
-                    patientData = Patient()
-                    patientData.email = email
-                    patientData.name = name
-                    patientData.mobile = mobile
-                    patientData.gender = gender
-                    patientData.dateOfBirth = dateOfBirth
-                    patientData.bloodGroup = bloodGroup
-                    patientData.registrationNumber = registrationNumber
+                    patientData = Patient.objects.create(name=name,mobile=mobile,email=email,gender=gender,dateOfBirth=dateOfBirth,bloodGroup=bloodGroup,registrationNumber=registrationNumber)
+                    # patientData.email = email
+                    # patientData.name = name
+                    # patientData.mobile = mobile
+                    # patientData.gender = gender
+                    # patientData.dateOfBirth = dateOfBirth
+                    # patientData.bloodGroup = bloodGroup
+                    # patientData.registrationNumber = registrationNumber
+
                     patientData.save()
                 except:
                     return render(request, 'newPatient.html',{'message':'Something went Wrong'})
@@ -50,7 +51,7 @@ def newPatient(request):
                     print(e)
                     return render(request, 'newPatient.html',{'message':'Failed To Send Email'})
                 finally:
-                    return render(request, 'newPatient.html',{'success':True})
+                    return render(request, 'newPatient.html',{'success':True, 'patientId':patientData.id})
                 
             else:
                 return render(request, 'newPatient.html')
@@ -69,7 +70,7 @@ def patientRecord(request, patientId):
                     height = request.POST['height']
                     weight = request.POST['weight']
                     allergies = request.POST['allergies']
-                    pregnancyStatus = request.POST['pregnancyStatus']
+                    pregnancyStatus = request.POST.get('pregnancyStatus', '')
                     isDiabetic = request.POST['isDiabetic']
                     insurancePlanName = request.POST['insurancePlanName']
                     insurancePlanNumber = request.POST['insurancePlanNumber']
@@ -87,7 +88,7 @@ def patientRecord(request, patientId):
                     patientRecord.previousSurgery = previousSurgery
                     patientRecord.status = status
                     patientRecord.save()
-                    return render(request, 'patientRecord.html',{'patient':patient,'success':True,'patientId':patientId})
+                    return redirect('/doctor/patient-list')
                 except Exception as e:
                     print(e)
                     return render(request, 'patientRecord.html',{'patient':patient,'message':'Something went Wrong','patientId':patientId})

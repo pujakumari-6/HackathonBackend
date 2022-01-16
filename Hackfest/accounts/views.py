@@ -3,11 +3,9 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse, response
 from django.contrib.auth.models import User
 import uuid
-from doctor.models import *
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
-
 
 # Create your views here.
 def choiseview(request):
@@ -15,7 +13,6 @@ def choiseview(request):
         return render(request, 'choise.html' )
     except:
         return HttpResponse("<h1>something went wrong!!!</h1>")
-
 
 def doctor_register(request, roleid):
     try:
@@ -25,76 +22,80 @@ def doctor_register(request, roleid):
             pwd=request.POST.get('pwd',None)
 
             if User.objects.filter(username=uname).exists():
-
                 return HttpResponse("User already available")
             else:
-                role_data=role.objects.get(role_id= roleid)
-                print(role_data.role)
                 user_obj=User.objects.create(username=uname,password=pwd,email=email)
                 user_obj.set_password(pwd)
                 user_obj.save()
-                roletable= Userrolemap.objects.create(user_id=user_obj, role_id=roleid)
-                roletable.save()
-                messages=role_data.role
-                return render (request, 'dummy.html', {"messages": messages} )
-                
-                
+                print(roleid)
+                if roleid == 1:
+                    role_data = Role.objects.filter(role='Doctor').first()
+                    # print(role_data.id)
+                    userRole= UserroleMap.objects.create(user_id=user_obj, role_id=role_data)
+                    userRole.save()
+                    request.session["role"]=role_data.role
+                    return render(request,'doctor.html', {})
+                else:
+                    print('inside else')
+                    role_data = Role.objects.filter(role='Nurse').first()
+                    # print(role_data.id)
+                    userRole= UserroleMap.objects.create(user_id=user_obj, role_id=role_data)
+                    userRole.save()
+                    request.session["role"]=role_data.role
+                    return render(request,'doctor.html', {})
         return render(request, 'ragister.html')    
-    except:
+    except Exception as e:
+        print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")
 
 def addNurse(request):
     try:
-        data={'roleid': 2 , 'message': "Nurse login!!!"}
-
+        data={'roleid': 2 , 'message': "Register Nurse"}
         return  render(request, 'ragister.html', context= data )
     except:
         return HttpResponse("<h1>something went wrong!!!</h1>")
+
 def addDoctor(request):
     try:
-        data={'roleid': 1 , 'message': "Doctor login!!!"}
+        data={'roleid': 1 , 'message': "Register Doctor"}
         return  render(request, 'ragister.html', context= data )
     except:
         return HttpResponse("<h1>something went wrong!!!</h1>")
 
 def docter_login(request):
-    try:    
+    try:
         if request.method =='POST':
             uname=request.POST.get('uname',None)
             pwd=request.POST.get('pwd',None)
             ubj= authenticate(request,username=uname,password=pwd) 
-
-            q = User.objects.filter(username=uname).filter(is_staff=True)
-            if q and ubj:
-
-                return redirect("choise/" )
-
-
-        
-            elif ubj:
-                object=Userrolemap.objects.filter(user_id=ubj).filter(role_id=2)
-                if object:
-                    messages="username taken thank you!!!"
-                    return HttpResponse("hello nurse")
-                else:
-                    return HttpResponse('Hello Doctor')
-
-            else:
-                
+            if ubj == None:
                 messages="Please enter valid details!!!"
                 return render( request, 'index.html', {"messages": messages})
-
+            q = User.objects.filter(username=uname).filter(is_staff=True)
+            userRoleMap = UserroleMap.objects.filter(user_id=ubj).first()
+            userRole = Role.objects.filter(role_id=userRoleMap.role_id).first()
+            request.session["role"]=userRole.role
+            if q and ubj:
+                return redirect("choise/")
+            # elif ubj:
+            else:
+                return render( request, 'doctor.html', {})
+                # request.session["role"]=userRole.role
+                # # object=UserroleMap.objects.filter(user_id=ubj).filter(role_id=2)
+                # if userRole.role == "Doctor":
+                #     request.session["role"]=userRole.role
+                #     messages="username taken thank you!!!"
+                    
+                # else:
+                #     return redirect('/doctor')
+            # else:
+            #     messages="Please enter valid details!!!"
+            #     return render( request, 'index.html', {"messages": messages})
         else:
-            
-
             return render(request, 'index.html')
-    except:
+    except Exception as e:
+        print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")
-
-
-
-
-
 
 def doctor_logout(request):
     try:
