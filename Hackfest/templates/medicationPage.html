@@ -115,14 +115,12 @@
                     <div class="col-md-9 register-right">
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <h3 class="register-heading">Register a Patient</h3>
-                                <form action="newPatient" method="post">{% csrf_token %}
+                                <h3 class="register-heading">Add Medicine</h3>
+                                <form action="/doctor/medication/{{ prescriptionId }}" method="post">{% csrf_token %}
                                     <div class="row register-form">
                                         <div class="col-md-12">
                                             {% if success %}
-                                            <div class="alert alert-success" role="alert">
-                                                Patient Successfully registered <a href="/healthcare/patientRecord/{{patientId}}" class="alert-link">Click here</a> to add his medical detail.
-                                            </div>
+                                                {{success}}
                                             {% endif %}
                                             {% if message %}
                                                 <div class="alert alert-danger" role="alert">
@@ -140,7 +138,14 @@
                                             <div class="form-group">
                                                 <input type="number" class="form-control" name="doseTiming" placeholder="Number Of Times *" value="" />
                                             </div>
-                                            
+                                            <div class="form-group">
+                                                <select class="form-control" name="medicineId">
+                                                    <option class="hidden"  selected disabled>Medicine Name</option>
+                                                    {% for val in allMeds %}
+                                                        <option value={{ val.id }}>{{ val.name }} </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>   
                                             
                                         </div>
                                         <div class="col-md-6">
@@ -152,7 +157,7 @@
                                             </div>
                                             
                         
-                                            <input type="submit" class="btnRegister"  value="Register"/>
+                                            <input type="submit" class="btnRegister"  value="Add"/>
                                         </div>
                                     </div>
                                 </form>

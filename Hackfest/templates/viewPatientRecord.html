@@ -115,9 +115,29 @@
                                     <td>{{history.weight}}</td>
                                   </tr>
                                 <tr>  
-                                  <th width="30%">Allergies</th>
+                                  <th width="30%">Blood Pressure</th>
                                   <td width="2%">:</td>
-                                  <td>{{history.allergies}}</td>
+                                  <td>{{history.bloodPressure}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Pulse Rate</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.pulseRate}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Body Temprature</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.bodyTemprature}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Alcolohic</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.isAlcolohic}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Smoker</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.isSmoker}}</td>
                                 </tr>
                                 {% if details.gender == "Female" %}
                                   <tr id="Pregnancy">
@@ -125,6 +145,13 @@
                                     <td width="2%">:</td>
                                     <td>{{history.pregnancyStatus}}</td>
                                   </tr>
+                                  {% if history.pregnancyStatus == "Yes" %}
+                                    <tr id="Pregnancy">
+                                      <th width="30%">Estimated Delivery</th>
+                                      <td width="2%">:</td>
+                                      <td>{{history.estimatedDelivery}}</td>
+                                    </tr>
+                                  {% endif %}
                                 {% endif %}
                                 <tr>
                                   <th width="30%">Previous Surgeries</th>
@@ -159,27 +186,31 @@
                           <div class="card shadow-sm">
                             <div class="card-header bg-transparent border-0">
                               <h3 class="mb-0"><button onclick="myFunction3()"><i class="far fa-clone pr-1"></i></button>Patient Prescriptions </h3>
-                              <h5 style="text-align: right;"><a href="addprescription/" class="btn btn-info btm-sm">Add Prescription</a></h5>
+                              {% if request.session.role == "Doctor" %}
+                                <h5 style="text-align: right;"><a href="/doctor/diagnosis/{{details.id}}" class="btn btn-info btm-sm">Add Prescription</a></h5>
+                              {% endif %}
                             </div>
                             <div class="card-body pt-0" id="table3">
-                              <table class="table table-bordered">
-                                <tr>
-                                  <th width="30%"></th>
-                                  <td width="2%">:</td>
-                                  <td>john doe</td>
-                                </tr>
-                                <tr>
-                                  <th width="30%"></th>
-                                  <td width="2%">:</td>
-                                  <td>john doe</td>
-                                </tr>
-                                <tr>
-                                  <th width="30%"></th>
-                                  <td width="2%">:</td>
-                                  <td>john doe</td>
-                                </tr>
-                                
-                              </table>
+                              <table class="table table-light table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Diagnosis Date</th>
+                                    <th scope="col">Diagnosis Name</th>
+                                    <th scope="col"></th>
+                                  </tr>
+                                </thead>
+                                {% if prescriptionList %}
+                                        {% for data in prescriptionList %}
+                                        <tr>
+                                          <td>{{data.diagnosisCreatedDate}}</td>
+                                          <td>{{data.diagnosisName}}</td>
+                                            <td>
+                                                <a href="/doctor/viewPrescription/{{data.prescriptionId}}" class="btn btn-info btm-sm">View Diagnosis</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                            </table>
                             </div>
                           </div>
                       </div>

@@ -23,207 +23,129 @@
             x.style.display="none";
           }
         }
-       
-        
-
-
     </script>
 	    
 </head>
 <body style="background-color:#16a085 ;">
-		
-
-
-
 <section>
   <br>
     <div class="rt-container">
           <div class="col-rt-12">
               <div class="Scriptcontent">
-              
                 <!-- Student Profile -->
                 <div class="student-profile py-4">
                   <div class="container">
                     <div class="row">
-                      
                       <div class="col-lg-12">
                         <div class="card shadow-sm">
                           <div class="card-header bg-transparent border-0">
-                            <h3 class="mb-0"><button onclick="myFunction2()"><i class="far fa-clone pr-1"></i></button>Diagnosis Details </h3>
+                            <h3 class="mb-0"><button onclick="myFunction2()"><i class="far fa-clone pr-1"></i></button>Diagnosis Details</h3>
                           </div>
                           <div class="card-body pt-0" id="table1">
                             <table class="table table-bordered" >
                               <tr>
                                 <th width="30%"> Diagnosis Name</th>
                                 <td width="2%">:</td>
-                                <td>{{details.name}}</td>
+                                <td>{{data.diagnosis.diagnosisName}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Diagnosis Body Part</th>
                                 <td width="2%">:</td>
-                                <td>{{details.dateOfBirth}}</td>
+                                <td>{{data.diagnosis.diagnosisBodySite}}</td>
                               </tr>
                               
                               <tr>
                                 <th width="30%">Onset Date</th>
                                 <td width="2%">:</td>
-                                <td>{{details.gender}}</td>
+                                <td>{{data.diagnosis.dateOfOnset}}</td>
                               </tr>
             
                               <tr>
                                 <th width="30%">Severity</th>
                                 <td width="2%">:</td>
-                                <td>{{details.bloodGroup}}</td>
+                                <td>{{data.diagnosis.severity}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Abatement Date</th>
                                 <td width="2%">:</td>
-                                <td>{{details.mobile}}</td>
+                                <td>{{data.diagnosis.dateOfAbatement}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Diagnosis Certainity</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.diagnosis.diagnosisCertainity}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Diagnosis Description</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.diagnosis.diagnosisDescription}}</td>
                               </tr>
                               <tr>
-                                <th width="30%">Device Used</th>
+                                <th width="30%">Medical Device Used</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.medicalDevice.deviceName}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Device Body Site</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.medicalDevice.deviceBodySite}}</td>
                               </tr>
                               <tr>
-                                <th width="30%">Device Use</th>
+                                <th width="30%">Use For</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.medicalDevice.deviceUse}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Device Description</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.medicalDevice.deviceDscription}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Test Name</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.laboratoryTest.testName}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Test Specimen</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.laboratoryTest.testSpecimen}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Test Body Site</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.laboratoryTest.testBodySite}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Test Use</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.laboratoryTest.testUse}}</td>
                               </tr>
                               <tr>
                                 <th width="30%">Test Description</th>
                                 <td width="2%">:</td>
-                                <td>{{details.email}}</td>
+                                <td>{{data.laboratoryTest.testDescription}}</td>
                               </tr>
                             </table>
                           </div>
                         </div>
                         <div style="height: 26px"></div>
-                        {% if data %}
-                              {% for patient in data %}
-                        <div class="row row-cols-4 row-cols-md-3">
-                            <div class="col mb-4">
-                              <div class="card h-100">
-                                
-                                <div class="card-body">
-                                  <h5 class="card-title">{{weugdsj}}</h5>
-                                  <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Dose Unit: {{dhsb}}</li>
-                                    <li class="list-group-item">Duration: {{ehbdc}}</li>
-                                    <li class="list-group-item">Number Of Times: {{dsx}}</li>
-                                    <li class="list-group-item">Additional Instruction: {{ewdsx}}</li>
-                                    <li class="list-group-item">Reason: {{efd}}</li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            </div>
-                          {% endfor %}
-                            {% endif %}
-                            <div class="row row-cols-4 row-cols-md-3">
-                                
+                            <div class="row row-cols-1 row-cols-md-3">
                                     <div class="col mb-4">
-                                      <div class="card h-100">
-                                        
+                                      <div class="card h-100" style="display: flex; flex-direction:column">
                                         <div class="card-body">
-                                          <h5 class="card-title">{{weugdsj}}</h5>
-                                          <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">Dose Unit: {{dhsb}}</li>
-                                            <li class="list-group-item">Duration: {{ehbdc}}</li>
-                                            <li class="list-group-item">Number Of Times: {{dsx}}</li>
-                                            <li class="list-group-item">Additional Instruction: {{ewdsx}}</li>
-                                            <li class="list-group-item">Reason: {{efd}}</li>
-                                          </ul>
+                                          {% for meds in data.medsDirList %}
+                                            <h5 class="card-title">{{ meds.medsName.name }}</h5>
+                                            <ul class="list-group list-group-flush">
+                                              <li class="list-group-item">Dose Unit: {{ meds.medsDir.doseUnit }}</li>
+                                              <li class="list-group-item">Duration: {{ meds.medsDir.duration }}</li>
+                                              <li class="list-group-item">Number Of Times: {{ meds.medsDir.doseTiming }}</li>
+                                              <li class="list-group-item">Additional Instruction: {{ meds.medsDir.additionalInstruction }}</li>
+                                              <li class="list-group-item">Reason: {{ meds.medsDir.reason }}</li>
+                                            </ul>
+                                          {% endfor %}
                                         </div>
                                       </div>
                                     </div>
-                                    
-                           
-                                    <div class="col mb-4">
-                                        <div class="card h-100">
-                                          
-                                          <div class="card-body">
-                                            <h5 class="card-title">{{weugdsj}}</h5>
-                                            <ul class="list-group list-group-flush">
-                                              <li class="list-group-item">Dose Unit: {{dhsb}}</li>
-                                              <li class="list-group-item">Duration: {{ehbdc}}</li>
-                                              <li class="list-group-item">Number Of Times: {{dsx}}</li>
-                                              <li class="list-group-item">Additional Instruction: {{ewdsx}}</li>
-                                              <li class="list-group-item">Reason: {{efd}}</li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col mb-4">
-                                        <div class="card h-100">
-                                          
-                                          <div class="card-body">
-                                            <h5 class="card-title">{{weugdsj}}</h5>
-                                            <ul class="list-group list-group-flush">
-                                              <li class="list-group-item">Dose Unit: {{dhsb}}</li>
-                                              <li class="list-group-item">Duration: {{ehbdc}}</li>
-                                              <li class="list-group-item">Number Of Times: {{dsx}}</li>
-                                              <li class="list-group-item">Additional Instruction: {{ewdsx}}</li>
-                                              <li class="list-group-item">Reason: {{efd}}</li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col mb-4">
-                                        <div class="card h-100">
-                                          
-                                          <div class="card-body">
-                                            <h5 class="card-title">{{weugdsj}}</h5>
-                                            <ul class="list-group list-group-flush">
-                                              <li class="list-group-item">Dose Unit: {{dhsb}}</li>
-                                              <li class="list-group-item">Duration: {{ehbdc}}</li>
-                                              <li class="list-group-item">Number Of Times: {{dsx}}</li>
-                                              <li class="list-group-item">Additional Instruction: {{ewdsx}}</li>
-                                              <li class="list-group-item">Reason: {{efd}}</li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                      </div>
                           </div>
                           
                           </div>
