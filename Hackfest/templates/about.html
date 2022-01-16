@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- custom css file link  -->
-    <link rel="stylesheet" href="/Hackfest/static/styles.css">Hackfest/static/styles.css
+    <link rel="stylesheet" href= '{% static "styles.css" %}'>
 
 </head>
 <body>
@@ -19,7 +20,7 @@
         <div class="row">
     
             <div class="image">
-                <img src="/Hackfest/static/home-img.svg" alt="">
+                <img src='{% static "/home-img.svg" %}' alt="">
             </div>
     
             <div class="content">
@@ -31,6 +32,7 @@
         </div>
     
     </section>
+    <!-- {% include "footer.html" %} -->
 </body>
 
 </html>

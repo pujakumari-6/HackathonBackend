@@ -151,17 +151,60 @@
                                                             <option value="Yes">Yes</option>
                                                             <option value="No">No</option>    
                                                         {% endif %}
-                                                        
-                                                        
                                                     </select>
                                                 </div>
+                                                {% if patient.pregnancyStatus == "Yes" %}
+                                                    <div class="form-group" style="display: none" id="pregDate">
+                                                        <input placeholder="Expected Delivery Date*" type="text" name="estimatedDelivery" class="form-control" value={{ patient.allergies }} onfocus="(this.type='date')"
+                                                        onblur="(this.type='text')"/>
+                                                    </div>
+                                                {% endif %}
                                             {% endif %}
                                             <div class="form-group">
                                                 <p>Allergies</p>
                                                 <textarea class="form-control" name="allergies" placeholder="Allergies" rows="5" value='' >{{ patient.allergies }}</textarea>
                                             </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="bloodPressure" placeholder="Blood Pressure" value={{ patient.bloodPressure }} />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="pulseRate" placeholder="Pulse Rate" value={{ patient.pulseRate }} />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="bodyTemprature" placeholder="Body Temprature" value={{ patient.bodyTemprature }} />
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <select class="form-control" name="isAlcolohic">
+                                                    <option class="hidden"  selected disabled>Alcoholic</option>
+                                                    {% if patient.isAlcolohic == "Yes" %}
+                                                        <option value="Yes" selected>Yes</option>
+                                                        <option value="No">No</option>
+                                                    {% elif patient.isAlcolohic == "No" %}
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No" selected>No</option>
+                                                    {% else %}
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>    
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <select class="form-control" name="isSmoker">
+                                                    <option class="hidden"  selected disabled>Smoker</option>
+                                                    {% if patient.isSmoker == "Yes" %}
+                                                        <option value="Yes" selected>Yes</option>
+                                                        <option value="No">No</option>
+                                                    {% elif patient.isSmoker == "No" %}
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No" selected>No</option>
+                                                    {% else %}
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>    
+                                                    {% endif %}
+                                                </select>
+                                            </div>
                                             <div class="form-group">
                                                 <p>Diabetic</p>
                                                 <select class="form-control" name="isDiabetic">

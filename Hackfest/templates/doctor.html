@@ -26,9 +26,9 @@
             <p>"In times of great danger, the ones who help to heal are doctors. Thank You" </p>
             <br>
             <p> --- Jane Bingley</p>
-            <a href="doctor/patient-list/" class="btn"> View Patients <span class="fas fa-chevron-right"></span> </a>
+            <a href="/doctor/patient-list/" class="btn"> View Patients <span class="fas fa-chevron-right"></span> </a>
             {% if request.session.role == "Nurse" %}
-                <a href="healthcare/newPatient" class="btn"> Register Patient <span class="fas fa-chevron-right"></span> </a>
+                <a href="/healthcare/newPatient" class="btn"> Register Patient <span class="fas fa-chevron-right"></span> </a>
             {% endif %}
         </div>
     </section>

@@ -103,6 +103,15 @@
     function cancel(){
         window.location.href="/doctor";  
     }
+    function isPregnant() {
+        var val = document.getElementById('preg').value;
+        if(val=="Yes"){
+            document.getElementById('pregDate').style.display = "block";
+        }
+        else{
+            document.getElementById('pregDate').style.display = "none";
+        }
+    }
 </script>
 <div class="container register">
                 <div class="row">
@@ -135,18 +144,45 @@
                                             </div>
                                             {% if patient.gender == "Female" %}
                                                 <div class="form-group">
-                                                    <select class="form-control" name="pregnancyStatus">
+                                                    <select class="form-control" id="preg" name="pregnancyStatus"  onClick="isPregnant()">
                                                         <option class="hidden"  selected disabled>Pregnancy Status</option>
                                                         <option value="Yes">Yes</option>
                                                         <option value="No">No</option>
                                                     </select>
                                                 </div>
+                                                <div class="form-group" style="display:none;" id="pregDate">
+                                                    <input placeholder="Expected Delivery Date*" type="text" name="estimatedDelivery" class="form-control" onfocus="(this.type='date')"
+                                                    onblur="(this.type='text')"/>
+                                                </div>
                                             {% endif %}
                                             <div class="form-group">
                                                 <textarea class="form-control" name="allergies" placeholder="Allergies *" rows="5" value="" ></textarea>
                                             </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="bloodPressure" placeholder="Blood Pressure" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="pulseRate" placeholder="Pulse Rate" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="bodyTemprature" placeholder="Body Temprature" value="" />
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <select class="form-control" name="isAlcolohic">
+                                                    <option class="hidden"  selected disabled>Alcoholic</option>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <select class="form-control" name="isSmoker">
+                                                    <option class="hidden"  selected disabled>Smoker</option>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+                                            </div>
                                             <div class="form-group">
                                                 <select class="form-control" name="isDiabetic">
                                                     <option class="hidden"  selected disabled>Diabetic</option>
