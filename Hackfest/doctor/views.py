@@ -12,10 +12,8 @@ from healthcare.models import Patient, PatientRecord
 
 def doctorHome(request):
     try:
-        if request.session['role']!= "Doctor" or request.session['role']!="Nurse":
+        if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
-
         return render(request, "doctor.html", {}) 
     except Exception as e:
         print(e)
@@ -24,7 +22,8 @@ def doctorHome(request):
 # Patient List
 def patientList(request):
     try:
-        if request.session['role']!= "Doctor" or request.session['role']!="Nurse":
+        print(request.session['role'])
+        if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
 
         data = Patient.objects.all()
@@ -142,17 +141,18 @@ def medication(request, prescriptionId):
             medicineId = request.POST['medicineId']
             medicine = Medicine.objects.filter(id=medicineId).first()
             allMeds = Medicine.objects.all()
-            doseUnit = request.POST['medicineId']
-            duration = request.POST['medicineId']
-            doseTiming = request.POST['medicineId']
-            additionalInstruction = request.POST['medicineId']
-            reason = request.POST['medicineId']
+            doseUnit = request.POST['doseUnit']
+            duration = request.POST['duration']
+            doseTiming = request.POST['doseTiming']
+            additionalInstruction = request.POST['additionalInstruction']
+            reason = request.POST['reason']
             medicationData = MedicineDirection.objects.create(medicineId=medicine,doseUnit=doseUnit,duration=duration,doseTiming=doseTiming,additionalInstruction=additionalInstruction,reason=reason)
             prescription = Prescription.objects.get(pk=prescriptionId)
             medicationDirData = MedicineDirPrescriptionMap.objects.create(prescriptionId=prescription,medicineDirectionId=medicationData)
-            return render(request, "medicationPage.html",{'prescriptionId':prescriptionId, 'allMeds':allMeds})
+            return render(request, "medicationPage.html",{'prescriptionId':prescriptionId, 'allMeds':allMeds, 'success':"Medicine Added Successfullty"})
         else:
             return render(request, "medicationPage.html",{'prescriptionId':prescriptionId})
     except Exception as e:
         print(e)
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+        allMeds = Medicine.objects.all()
+        return render(request, "medicationPage.html",{'prescriptionId':prescriptionId,'allMeds':allMeds,'message':"Please Fill All The Required Details!"})

@@ -191,6 +191,7 @@
                               {% endif %}
                             </div>
                             <div class="card-body pt-0" id="table3">
+                              {% if prescriptionList %}
                               <table class="table table-light table-bordered">
                                 <thead>
                                   <tr>
@@ -211,6 +212,8 @@
                                         {% endfor %}
                                     {% endif %}
                             </table>
+                              {% endif %}
+                              
                             </div>
                           </div>
                       </div>

@@ -10,6 +10,9 @@ from django.conf import settings
 # Create your views here.
 
 # register patient
+
+
+
 def newPatient(request):
     try:
         if request.session['role']!="Nurse":
@@ -48,14 +51,11 @@ def newPatient(request):
                 return render(request, 'newPatient.html',{'message':'Failed To Send Email'})
             finally:
                 return render(request, 'newPatient.html',{'success':True, 'patientId':patientData.id})
-            
         else:
                 return render(request, 'newPatient.html')
     except Exception as e:
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")
-    
-    
 
 # Create new patient record
 def patientRecord(request, patientId):
@@ -65,7 +65,6 @@ def patientRecord(request, patientId):
 
         patient = Patient.objects.filter(id=patientId).first()
         if request.method == 'POST':
-            # try:
                 patientRecord = PatientRecord.objects.filter(patientId=patientId)
                 if len(patientRecord) != 0:
                     return render(request, 'patientRecord.html',{'message':'Patient record already exists'})
@@ -106,17 +105,12 @@ def patientRecord(request, patientId):
                 patientRecord.status = status
                 patientRecord.save()
                 return redirect('/doctor/patient-list')
-            # except Exception as e:
-            #     print(e)
-            #     return render(request, 'patientRecord.html',{'patient':patient,'message':'Something went Wrong','patientId':patientId})
         else:
             return render(request, 'patientRecord.html', {'patient':patient,'patientId':patientId})
     except Exception as e:
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")
-    # else:
-    #         return redirect('/')
-
+        
 # update patient record
 def updatePatientRecord(request, patientId):
     try:

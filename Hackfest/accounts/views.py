@@ -44,7 +44,6 @@ def doctor_register(request, roleid):
             
                     userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
-        return render(request, 'ragister.html')
                     return redirect('/accounts/choise/')
 
         return render(request, 'ragister.html', {'messages': 'Please Add Valid Details !'})
