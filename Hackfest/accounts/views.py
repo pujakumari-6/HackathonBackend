@@ -40,14 +40,14 @@ def doctor_register(request, roleid):
                     userRole.save()
                     return redirect('/accounts/choise/')
                 else:
-                   
                     role_data = Role.objects.filter(role='Nurse').first()
             
                     userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
+        return render(request, 'ragister.html')
                     return redirect('/accounts/choise/')
 
-        return render(request, 'ragister.html', {'messages': 'Please Add Valid Details !'})    
+        return render(request, 'ragister.html', {'messages': 'Please Add Valid Details !'})
     except Exception as e:
         print(e)
         return render(request, 'index.html', {'messages': "Something Went Wrong!!"})
@@ -86,12 +86,11 @@ def docter_login(request):
             q = User.objects.filter(username=uname).filter(is_staff=True)
             table1_data= UserroleMap.objects.filter(user_id=ubj.id).first()
             userRole= Role.objects.filter(id=table1_data.role_id).first()
-            request.session["role"]=userRole.role
+            request.session["role"]=userRole.role  
             if q and ubj:
                 return redirect("/accounts/choise/")
             else:
                 return render( request, 'doctor.html',  {'messages': "please add valid data !"})
-
         else:
             return render(request, 'index.html')
     except Exception as e:
