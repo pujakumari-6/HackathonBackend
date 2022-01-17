@@ -129,12 +129,13 @@
                           </div>
                         </div>
                         <div style="height: 26px"></div>
-                            <div class="row row-cols-1 row-cols-md-3">
+                            <div class="card-deck" style="display: flex" > 
+                              {% for meds in data.medsDirList %}
                                     <div class="col mb-4">
-                                      <div class="card h-100" style="display: flex; flex-direction:column">
+                                      <div class="card h-100" >
                                         <div class="card-body">
-                                          {% for meds in data.medsDirList %}
-                                            <h5 class="card-title">{{ meds.medsName.name }}</h5>
+                                          
+                                            <h5 class="card-title" style="text-align: center">{{ meds.medsName.name }}</h5>
                                             <ul class="list-group list-group-flush">
                                               <li class="list-group-item">Dose Unit: {{ meds.medsDir.doseUnit }}</li>
                                               <li class="list-group-item">Duration: {{ meds.medsDir.duration }}</li>
@@ -142,10 +143,11 @@
                                               <li class="list-group-item">Additional Instruction: {{ meds.medsDir.additionalInstruction }}</li>
                                               <li class="list-group-item">Reason: {{ meds.medsDir.reason }}</li>
                                             </ul>
-                                          {% endfor %}
+                                          
                                         </div>
                                       </div>
                                     </div>
+                                    {% endfor %}
                           </div>
                           
                           </div>
