@@ -27,21 +27,17 @@ def doctor_register(request, roleid):
                 user_obj=User.objects.create(username=uname,password=pwd,email=email)
                 user_obj.set_password(pwd)
                 user_obj.save()
-                print(roleid)
                 if roleid == 1:
                     role_data = Role.objects.filter(role='Doctor').first()
                     userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
-                    request.session["role"]=role_data.role
-                    return render(request,'doctor.html', {})
+                    return render(request,'choise.html', {})
                 else:
-                   
                     role_data = Role.objects.filter(role='Nurse').first()
             
                     userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
-                    request.session["role"]=role_data.role
-                    return render(request,'doctor.html', {})
+                    return render(request,'choise.html', {})
         return render(request, 'ragister.html')    
     except Exception as e:
         print(e)
@@ -73,13 +69,11 @@ def docter_login(request):
             q = User.objects.filter(username=uname).filter(is_staff=True)
             table1_data= UserroleMap.objects.filter(user_id=ubj.id).first()
             userRole= Role.objects.filter(id=table1_data.role_id).first()
-            request.session["role"]=userRole.role
+            request.session["role"]=userRole.role  
             if q and ubj:
                 return redirect("choise/")
-            # elif ubj:
             else:
                 return render( request, 'doctor.html', {})
-
         else:
             return render(request, 'index.html')
     except Exception as e:
@@ -88,7 +82,7 @@ def docter_login(request):
 
 def doctor_logout(request):
     try:
-        del request.session['uid']
-        return redirect('/doctor/loginpage')
+        del request.session['role']
+        return redirect('')
     except:
-        return HttpResponse("<h3>Somthing is wrong !!!!!</h3>")
+        return HttpResponse('<h3 style="text-align:center"> Somthing went wrong !!!!!</h3>')

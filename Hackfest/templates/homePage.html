@@ -134,7 +134,13 @@ nav .menu{
         <a href="#">Innovative Healthcare</a>
       </div>
       <ul>
-        <li><a href="accounts/loginpage">Sign in</a></li>
+        {% if request.session.role %}
+          <li><a href="accounts/logout">Sign out</a></li>
+        {% else %}
+          <li><a href="accounts/loginpage">Sign in</a></li>
+        {% endif %}
+        
+        
       </ul>
     </div>
   </nav>
@@ -146,7 +152,7 @@ nav .menu{
       <a href="/registrationNo"><button>Prescription</button></a>
     </div>
   </div>
-  {% extends "footer.html" %}
+  {% include "footer.html" %}
 </body>
 
 </html>
