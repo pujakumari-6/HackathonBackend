@@ -30,15 +30,14 @@ def doctor_register(request, roleid):
                 print(roleid)
                 if roleid == 1:
                     role_data = Role.objects.filter(role='Doctor').first()
-                    print(role_data.id)
                     userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
                     request.session["role"]=role_data.role
                     return render(request,'doctor.html', {})
                 else:
-                    print('inside else')
+                   
                     role_data = Role.objects.filter(role='Nurse').first()
-                    # print(role_data.id)
+            
                     userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
                     request.session["role"]=role_data.role
@@ -67,10 +66,7 @@ def docter_login(request):
         if request.method =='POST':
             uname=request.POST.get('uname',None)
             pwd=request.POST.get('pwd',None)
-            print(uname)
-            print(pwd)
             ubj= authenticate(request, username=uname, password=pwd) 
-            print(ubj.id)
             if ubj == None:
                 messages="Please enter valid details!!!"
                 return render( request, 'index.html', {"messages": messages})
