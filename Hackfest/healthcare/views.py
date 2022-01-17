@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from urllib import response
 from django.shortcuts import render, HttpResponse, redirect
@@ -25,14 +26,6 @@ def newPatient(request):
                     uuidNo = str(uuid.uuid4()).replace("-","")[0:10]
                     registrationNumber = name.replace(' ','')+uuidNo+str(random.randint(2345678909800, 9923456789000))[0:5]
                     patientData = Patient.objects.create(name=name,mobile=mobile,email=email,gender=gender,dateOfBirth=dateOfBirth,bloodGroup=bloodGroup,registrationNumber=registrationNumber)
-                    # patientData.email = email
-                    # patientData.name = name
-                    # patientData.mobile = mobile
-                    # patientData.gender = gender
-                    # patientData.dateOfBirth = dateOfBirth
-                    # patientData.bloodGroup = bloodGroup
-                    # patientData.registrationNumber = registrationNumber
-
                     patientData.save()
                 except:
                     return render(request, 'newPatient.html',{'message':'Something went Wrong'})
@@ -63,25 +56,40 @@ def patientRecord(request, patientId):
     # if request.session.has_key('uid'):
             patient = Patient.objects.filter(id=patientId).first()
             if request.method == 'POST':
-                try:
+                # try:
                     patientRecord = PatientRecord.objects.filter(patientId=patientId)
                     if len(patientRecord) != 0:
                         return render(request, 'patientRecord.html',{'message':'Patient record already exists'})
                     height = request.POST['height']
                     weight = request.POST['weight']
                     allergies = request.POST['allergies']
-                    pregnancyStatus = request.POST.get('pregnancyStatus', '')
-                    isDiabetic = request.POST['isDiabetic']
+                    pregnancyStatus = request.POST.get('pregnancyStatus', None)
+                    if request.POST.get('estimatedDelivery', None) == None:
+                        estimatedDelivery = None
+                    else:
+                        estimatedDelivery = request.POST.get('estimatedDelivery', None)
+                    bloodPressure = request.POST['bloodPressure']
+                    pulseRate = request.POST['pulseRate']
+                    bodyTemprature = request.POST['bodyTemprature']
+                    isAlcolohic = request.POST.get('isAlcolohic',None)
+                    isSmoker = request.POST.get('isSmoker',None)
+                    isDiabetic = request.POST.get('isDiabetic',None)
                     insurancePlanName = request.POST['insurancePlanName']
                     insurancePlanNumber = request.POST['insurancePlanNumber']
                     previousSurgery = request.POST['previousSurgery']
                     status = request.POST['status']
                     patientRecord = PatientRecord()
                     patientRecord.patientId = patient
+                    patientRecord.bloodPressure =bloodPressure
+                    patientRecord.pulseRate = pulseRate
+                    patientRecord.bodyTemprature = bodyTemprature
+                    patientRecord.isAlcolohic = isAlcolohic
+                    patientRecord.isSmoker = isSmoker
                     patientRecord.height = height
                     patientRecord.weight = weight
                     patientRecord.allergies = allergies
                     patientRecord.pregnancyStatus = pregnancyStatus
+                    patientRecord.estimatedDelivery = estimatedDelivery
                     patientRecord.insurancePlanName = insurancePlanName
                     patientRecord.insurancePlanNumber = insurancePlanNumber
                     patientRecord.isDiabetic = isDiabetic
@@ -89,9 +97,9 @@ def patientRecord(request, patientId):
                     patientRecord.status = status
                     patientRecord.save()
                     return redirect('/doctor/patient-list')
-                except Exception as e:
-                    print(e)
-                    return render(request, 'patientRecord.html',{'patient':patient,'message':'Something went Wrong','patientId':patientId})
+                # except Exception as e:
+                #     print(e)
+                #     return render(request, 'patientRecord.html',{'patient':patient,'message':'Something went Wrong','patientId':patientId})
             else:
                 return render(request, 'patientRecord.html', {'patient':patient,'patientId':patientId})
     # else:
@@ -106,29 +114,47 @@ def updatePatientRecord(request, patientId):
                 return render(request, 'patientRecord.html',{'message':'Patient desnot exist!'})
             patientRecord = patient.first()
             if request.method == 'POST':
-                try:
+                # try:
                     height = request.POST['height']
                     weight = request.POST['weight']
                     allergies = request.POST['allergies']
-                    pregnancyStatus = request.POST['pregnancyStatus']
-                    isDiabetic = request.POST['isDiabetic']
+                    pregnancyStatus = request.POST.get('pregnancyStatus', None)
+                    if request.POST.get('estimatedDelivery', None) == None:
+                        estimatedDelivery = None
+                    else:
+                        estimatedDelivery = request.POST.get('estimatedDelivery', None)
+                    bloodPressure = request.POST['bloodPressure']
+                    pulseRate = request.POST['pulseRate']
+                    bodyTemprature = request.POST['bodyTemprature']
+                    isAlcolohic = request.POST.get('isAlcolohic',None)
+                    isSmoker = request.POST.get('isSmoker',None)
+                    isDiabetic = request.POST.get('isDiabetic',None)
                     insurancePlanName = request.POST['insurancePlanName']
                     insurancePlanNumber = request.POST['insurancePlanNumber']
                     previousSurgery = request.POST['previousSurgery']
                     status = request.POST['status']
+                    patientRecord.patientId = patientP
+                    patientRecord.bloodPressure =bloodPressure
+                    patientRecord.pulseRate = pulseRate
+                    patientRecord.bodyTemprature = bodyTemprature
+                    patientRecord.isAlcolohic = isAlcolohic
+                    patientRecord.isSmoker = isSmoker
                     patientRecord.height = height
                     patientRecord.weight = weight
                     patientRecord.allergies = allergies
                     patientRecord.pregnancyStatus = pregnancyStatus
+                    patientRecord.estimatedDelivery = estimatedDelivery
                     patientRecord.insurancePlanName = insurancePlanName
                     patientRecord.insurancePlanNumber = insurancePlanNumber
                     patientRecord.isDiabetic = isDiabetic
                     patientRecord.previousSurgery = previousSurgery
                     patientRecord.status = status
                     patientRecord.save()
+
                     return render(request, 'updatePatientRecord.html',{'patient':patientRecord,'success':True,'profile':patientP})
-                except Exception as e:
-                    print(e)
+                    
+                # except Exception as e:
+                #     print(e)
                     return render(request, 'updatePatientRecord.html',{'patient':patientRecord,'message':'Something went Wrong','profile':patientP})
             else:
                 return render(request, 'updatePatientRecord.html', {'patient':patientRecord,'profile':patientP})

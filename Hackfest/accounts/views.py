@@ -30,16 +30,15 @@ def doctor_register(request, roleid):
                 print(roleid)
                 if roleid == 1:
                     role_data = Role.objects.filter(role='Doctor').first()
-                    # print(role_data.id)
-                    userRole= UserroleMap.objects.create(user_id=user_obj, role_id=role_data)
+                    userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
                     request.session["role"]=role_data.role
                     return render(request,'doctor.html', {})
                 else:
-                    print('inside else')
+                   
                     role_data = Role.objects.filter(role='Nurse').first()
-                    # print(role_data.id)
-                    userRole= UserroleMap.objects.create(user_id=user_obj, role_id=role_data)
+            
+                    userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
                     userRole.save()
                     request.session["role"]=role_data.role
                     return render(request,'doctor.html', {})
@@ -67,30 +66,20 @@ def docter_login(request):
         if request.method =='POST':
             uname=request.POST.get('uname',None)
             pwd=request.POST.get('pwd',None)
-            ubj= authenticate(request,username=uname,password=pwd) 
+            ubj= authenticate(request, username=uname, password=pwd) 
             if ubj == None:
                 messages="Please enter valid details!!!"
                 return render( request, 'index.html', {"messages": messages})
             q = User.objects.filter(username=uname).filter(is_staff=True)
-            userRoleMap = UserroleMap.objects.filter(user_id=ubj).first()
-            userRole = Role.objects.filter(role_id=userRoleMap.role_id).first()
+            table1_data= UserroleMap.objects.filter(user_id=ubj.id).first()
+            userRole= Role.objects.filter(id=table1_data.role_id).first()
             request.session["role"]=userRole.role
             if q and ubj:
                 return redirect("choise/")
             # elif ubj:
             else:
                 return render( request, 'doctor.html', {})
-                # request.session["role"]=userRole.role
-                # # object=UserroleMap.objects.filter(user_id=ubj).filter(role_id=2)
-                # if userRole.role == "Doctor":
-                #     request.session["role"]=userRole.role
-                #     messages="username taken thank you!!!"
-                    
-                # else:
-                #     return redirect('/doctor')
-            # else:
-            #     messages="Please enter valid details!!!"
-            #     return render( request, 'index.html', {"messages": messages})
+
         else:
             return render(request, 'index.html')
     except Exception as e:
@@ -103,7 +92,3 @@ def doctor_logout(request):
         return redirect('/doctor/loginpage')
     except:
         return HttpResponse("<h3>Somthing is wrong !!!!!</h3>")
-
-
-
-

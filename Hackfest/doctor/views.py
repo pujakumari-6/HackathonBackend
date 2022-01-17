@@ -6,60 +6,122 @@ import uuid
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
-from .models import Prescription, PrescribedMedicine, Medicine
+from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
 
 def doctorHome(request):
-    return render(request, "doctor.html", {})   
+    return render(request, "doctor.html", {}) 
 
 # Patient List
 def patientList(request):
     data = Patient.objects.all()
-    return render(request, "patientlist.html", {'data':data})   
+    return render(request, "patientlist.html", {'data':data})     
 
 # Patient Detail
-def patientRecord(request, id):
-    history = PatientRecord.objects.filter(id=id)
-    details = Patient.objects.filter(pk=id).first()
-    if(len(history) !=0):
-        patientHistory = history.first()
-        return render(request, "patientrecord.html", {'history':patientHistory, 'details':details}) 
-    else:
-        return render(request, "patientrecord.html", {'history':'', 'details':details})
-
-#def doctorLogin(request):
-    #return render(request, "doctor.html")  
-# Adding Prescription
-def makeprescriptions(request):
-    if request.method == 'POST':
-        patientId = request.session.get('id')
-        patient = Patient.objects.get(patientId=patientId)
-        prescriptionsDate = request.POST["date"]
-        priscription = Prescription(prescriptionIssueDate=prescriptionsDate,prescriptionPatient=patient)
-        priscription.save()
-        return render(request, "",{"data":priscription})
-
-# Add medcine on Prescription
-def addMedicineOnPrescription(request):
-    if request.method=="POST":
-        prescribedMedicineDuration=request.POST['prescribedMedicineDuration']
-        prescribedMedicineMedicine=request.POST['medicineId']
-        prescribedMedicineQuantity=request.POST['prescribedMedicineQuantity']
-        prescribedMedicineTakenQuantity=request.POST['prescribedMedicineTakenQuantity']
-        prescribedMedicinePrescription=request.POST['prescriptionId']
-        prescribedMedicineDiagnosis= request.POST['prescriptionDiagnosis']
-        medicine = Medicine.objects.get(medicineId=prescribedMedicineMedicine)
-        prescription = Prescription.objects.get(prescriptionId=prescribedMedicinePrescription)
-
-        prescribedMedicine = PrescribedMedicine(prescribedMedicineDuration=prescribedMedicineDuration,prescribedMedicineMedicine=medicine,prescribedMedicineQuantity=prescribedMedicineQuantity,prescribedMedicineTakenQuantity=prescribedMedicineTakenQuantity,prescribedMedicineDiagnosis=prescribedMedicineDiagnosis,prescribedMedicinePrescription=prescription)
-        prescribedMedicine.save()
-        
-        return HttpResponse("added")
-    return render(request, 'addprescription.html')    
-
-
+def patientRecord(request, patientId):
+    # try:
+        patientDetails = Patient.objects.get(pk=patientId)
+        history = PatientRecord.objects.get(patientId=patientId)
+        allPrescription = Prescription.objects.filter(patientId=patientDetails)
+        prescriptionListData = []
+        for prep in allPrescription:
+            diagnosis = Diagnosis.objects.get(pk=prep.diagnosisId.id)
+            prescriptionListData.append({
+                'diagnosisCreatedDate': diagnosis.createdDate,
+                'diagnosisName': diagnosis.diagnosisName,
+                'prescriptionId':prep.id
+            })
+        return render(request, "viewPatientRecord.html", {'history':history, 'details':patientDetails,'prescriptionList':prescriptionListData}) 
+    # except Exception as e:
+    #     print(e)
+    #     return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
 # See Prescription
-def seePrescription(request):
-    patientId = request.session.get('id')
-    return render(request, "Patient/patient_prescription.html")
+
+def viewPrescription(request, prescriptionId):
+    prescription = Prescription.objects.get(pk=prescriptionId)
+    patient = Patient.objects.get(pk=prescription.patientId.id)
+    diagnosis = Diagnosis.objects.get(pk=prescription.diagnosisId.id)
+    medicalDevice = MedicalDevice.objects.get(pk=prescription.medicalDevice.id)
+    laboratoryTest = LaboratoryTest.objects.get(pk=prescription.laboratoryTestId.id)
+    medicinDirMap = MedicineDirPrescriptionMap.objects.filter(prescriptionId=prescription)
+    if len(medicinDirMap) != 0:
+        print('in if')
+        medsDirList = []
+        for entry in medicinDirMap:
+            medsDir = MedicineDirection.objects.filter(pk=entry.medicineDirectionId.id).first()
+            medsName = Medicine.objects.filter(pk=medsDir.medicineId.id).first()
+            medsDirList.append({
+                'medsDir':medsDir,
+                'medsName':medsName
+            })
+            print(medsDirList)
+        data = {
+        'patient':patient,
+        'diagnosis':diagnosis,
+        'medicalDevice':medicalDevice,
+        'laboratoryTest':laboratoryTest,
+        'medsDirList':medsDirList
+        }
+        return render(request, "diagnosisDescription.html",{'data':data})
+    else:
+        data = {
+            'patient':patient,
+            'diagnosis':diagnosis,
+            'medicalDevice':medicalDevice,
+            'laboratoryTest':laboratoryTest,
+        }
+        return render(request, "diagnosisDescription.html",{'data':data})
+
+def diagnosis(request, patientId):
+    patient = Patient.objects.filter(id=patientId).first()
+    if request.method == 'POST':
+        diagnosisName = request.POST.get('diagnosisName',None)
+        diagnosisBodySite = request.POST.get('diagnosisBodySite',None)
+        if request.POST['dateOfOnset'] == '':
+            dateOfOnset = None
+        else:
+            dateOfOnset = request.POST['dateOfOnset']
+        severity = request.POST.get('severity',None)
+        if request.POST['dateOfAbatement'] == '':
+            dateOfAbatement = None
+        else:
+            dateOfAbatement = request.POST['dateOfAbatement']
+        diagnosisCertainity = request.POST.get('diagnosisCertainity',None)
+        diagnosisDescription = request.POST.get('diagnosisDescription',None)
+        deviceName = request.POST.get('deviceName',None)
+        deviceBodySite = request.POST.get('deviceBodySite',None)
+        deviceUse = request.POST.get('deviceUse',None)
+        deviceDescription = request.POST.get('deviceDescription',None)
+        testName = request.POST.get('testName',None)
+        testBodySite = request.POST.get('testBodySite',None)
+        testUse = request.POST.get('testUse',None)
+        testDescription =  request.POST.get('testDescription',None)
+        testSpecimen =  request.POST.get('testSpecimen',None)
+        diagnosisData = Diagnosis.objects.create(diagnosisName=diagnosisName,diagnosisBodySite=diagnosisBodySite,dateOfOnset=dateOfOnset,severity=severity,dateOfAbatement=dateOfAbatement,diagnosisCertainity=diagnosisCertainity,diagnosisDescription=diagnosisDescription)
+        deviceData = MedicalDevice.objects.create(deviceName=deviceName,deviceBodySite=deviceBodySite,deviceUse=deviceUse,deviceDscription=deviceDescription)
+        laboratoryTestData = LaboratoryTest.objects.create(testName=testName,testBodySite=testBodySite,testUse=testUse,testDescription=testDescription, testSpecimen=testSpecimen)
+        prescriptionData = Prescription.objects.create(patientId=patient,diagnosisId=diagnosisData,medicalDevice=deviceData,laboratoryTestId=laboratoryTestData)
+        allMeds = Medicine.objects.all()
+        return render(request, "medicationPage.html",{'prescriptionId':prescriptionData.id,'allMeds':allMeds})
+
+    else:
+        return render(request, "diagnosisPage.html",{'patient':patient})
+
+
+def medication(request, prescriptionId):
+    if request.method == 'POST':
+        medicineId = request.POST['medicineId']
+        medicine = Medicine.objects.filter(id=medicineId).first()
+        allMeds = Medicine.objects.all()
+        doseUnit = request.POST['medicineId']
+        duration = request.POST['medicineId']
+        doseTiming = request.POST['medicineId']
+        additionalInstruction = request.POST['medicineId']
+        reason = request.POST['medicineId']
+        medicationData = MedicineDirection.objects.create(medicineId=medicine,doseUnit=doseUnit,duration=duration,doseTiming=doseTiming,additionalInstruction=additionalInstruction,reason=reason)
+        prescription = Prescription.objects.get(pk=prescriptionId)
+        medicationDirData = MedicineDirPrescriptionMap.objects.create(prescriptionId=prescription,medicineDirectionId=medicationData)
+        return render(request, "medicationPage.html",{'prescriptionId':prescriptionId, 'allMeds':allMeds})
+    else:
+        return render(request, "medicationPage.html",{'prescriptionId':prescriptionId})
 
