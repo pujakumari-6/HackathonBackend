@@ -9,7 +9,20 @@ from django.contrib.auth import authenticate
 from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
 
-
+def searchPatient(request):
+    try:
+        print(request.session['role'])
+        if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
+            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
+        if request.method == 'POST':
+            searched = request.POST['searched']
+            data = Patient.objects.filter(name__contains=searched)
+            return render(request, "patientlist.html", {'data':data})   
+    
+    except Exception as e:
+        print(e)
+        return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
+    
 def doctorHome(request):
     try:
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
@@ -22,7 +35,7 @@ def doctorHome(request):
 # Patient List
 def patientList(request):
     try:
-        print(request.session['role'])
+        #print(request.session['role'])
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
 
@@ -36,6 +49,7 @@ def patientList(request):
 def patientRecord(request, patientId):
     try:
         patientDetails = Patient.objects.get(pk=patientId)
+        print(patientDetails.name)
         history = PatientRecord.objects.get(patientId=patientId)
         allPrescription = Prescription.objects.filter(patientId=patientDetails)
         prescriptionListData = []
