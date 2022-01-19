@@ -1,39 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html"%}
+{% block content %}
+
+
     {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
 
     <!-- custom css file link  -->
-    <link rel="stylesheet" href= '{% static "styles.css" %}'>
-
+    <link rel="stylesheet" href="../static/styles.css"> 
+    
 </head>
 <body>
-    <section class="about" id="about">
+    <div id="two" >
+        <section class="about" id="about" >
 
-        <h1 class="heading"> <span>about</span> us </h1>
-    
-        <div class="row">
-    
-            <div class="image">
-                <img src='{% static "/home-img.svg" %}' alt="">
+            <h1 class="heading"> <span style="color:#16a085 ;">about</span> us </h1>
+        
+            <div class="row" id="row" style="display: flex; ">
+        
+                <div class="image">
+                    <img src='{% static "/home-img.svg" %}' alt="" height="500" width="500"> 
+                </div>
+        
+                <div class="content">
+                    <h3></h3>
+                    <p>We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.</p>
+                    <p>Let us all togther be there and work for it. Hello </p>
+                </div>
+        
             </div>
+        
+        </section>
+    </div>
     
-            <div class="content">
-                <h3></h3>
-                <p>We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.</p>
-                <p></p>
-            </div>
-    
-        </div>
-    
-    </section>
-    <!-- {% include "footer.html" %} -->
-</body>
 
-</html>
-
+{% endblock %}
