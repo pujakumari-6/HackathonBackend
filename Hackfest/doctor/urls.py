@@ -10,6 +10,7 @@ urlpatterns = [
     path('/diagnosis/<int:patientId>', views.diagnosis),
     path('/medication/<int:prescriptionId>', views.medication),
     path('/searchpage/', views.searchPatient, name='searchlist'),
-    path('/laboratoryTest/<int:prescriptionId>/<str:message>', views.laboratoryTest, name='laboratoryTest'),
+    path('/medicineFile/<int:prescriptionId>', views.medicineFile, name='medicineFile'),
+    path('/laboratoryTest/<int:prescriptionId>', views.laboratoryTest, name='laboratoryTest')
 
 ]

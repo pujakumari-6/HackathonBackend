@@ -11,6 +11,69 @@ from healthcare.models import Patient, PatientRecord
 from accounts.middleware import  doctor_middleware , both_middleware,doctordata_middleware, bothdata_middleware
 from django.db import transaction
 
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
+def medicineFile(request, prescriptionId):
+   
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize= letter, bottomup= 0)
+    textob= c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica", 16)
+    p=("Patient Name-")
+    textob.textLine(p)
+    prescription = Prescription.objects.get(pk=prescriptionId)
+    patient = Patient.objects.get(pk=prescription.patientId.id)
+    diagnosis = Diagnosis.objects.get(pk=prescription.diagnosisId.id)
+    medicinDirMap = MedicineDirPrescriptionMap.objects.filter(prescriptionId=prescription)
+    textob.textLine(patient.name)
+    q=("Diagnosis Name-")
+    textob.textLine(q)
+    textob.textLine(diagnosis.diagnosisName)
+    r=("----------------------------------------------------------")
+    textob.textLine(r)
+    t=("[MEDICINES]")
+    textob.textLine(t)
+    if len(medicinDirMap) != 0:
+            print('in if')
+            medsDirList = []
+            for entry in medicinDirMap:
+                medsDir = MedicineDirection.objects.filter(pk=entry.medicineDirectionId.id).first()
+                medsName = Medicine.objects.filter(pk=medsDir.medicineId.id).first()
+                medsDirList.append({
+                    'medsDir':medsDir,
+                    'medsName':medsName
+                })
+            lines = []
+            for meds in medsDirList:
+                lines.append("Name-")
+                lines.append(meds['medsName'].name)
+                lines.append("Dose Unit-")
+                lines.append(meds['medsDir'].doseUnit)
+                lines.append("Duration-")
+                lines.append(meds['medsDir'].duration)
+                lines.append("Number Of Times-")
+                lines.append(meds['medsDir'].doseTiming)
+                lines.append("Instruction-")
+                lines.append(meds['medsDir'].additionalInstruction)
+                lines.append("Reason-")
+                lines.append(meds['medsDir'].reason)
+                lines.append("----------------------------------------------------------")
+            
+            for line in lines:
+                textob.textLine(line)
+    c.drawText(textob) 
+    c.showPage() 
+    c.save()  
+    buf.seek(0)
+    return FileResponse(buf, as_attachment=True, filename='medicine.pdf')
+
+
+
 @both_middleware
 def searchPatient(request):
     try:
@@ -74,7 +137,7 @@ def patientRecord(request, patientId):
     except Exception as e:
         print(e)
         # return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
-        redirect('/')
+        return redirect('/')
 
 # See Prescription
 def viewMedicine(request,mdicineId,patientId):
@@ -94,10 +157,9 @@ def viewPrescription(request, prescriptionId):
         laboratoryTest = LabTestPrescriptionMap.objects.filter(prescriptionId=prescription)
         tests=[]
         if(len(laboratoryTest)>0):
-            if len(laboratoryTest):
-                for lab in laboratoryTest:
-                    test = LaboratoryTest.get(pk=lab.laboratoryTestId.id)
-                    tests.append(test)
+            for lab in laboratoryTest:
+                test = LaboratoryTest.objects.get(pk=lab.laboratoryTestId.id)
+                tests.append(test)
         medicinDirMap = MedicineDirPrescriptionMap.objects.filter(prescriptionId=prescription)
         medsDirList = []
         if len(medicinDirMap) != 0:
@@ -110,6 +172,7 @@ def viewPrescription(request, prescriptionId):
                 })
                 print(medsDirList)
         data = {
+            'prescriptionId':prescriptionId,
             'patient':patient,
             'diagnosis':diagnosis,
             'medicalDevice':medicalDevice,
@@ -122,24 +185,26 @@ def viewPrescription(request, prescriptionId):
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")   
 
-@doctordata_middleware
+# @doctordata_middleware
 def laboratoryTest(request,prescriptionId):
     try:
-        testName = request.POST.get('testName',None)
-        testBodySite = request.POST.get('testBodySite',None)
-        testUse = request.POST.get('testUse',None)
-        testDescription =  request.POST.get('testDescription',None)
-        testSpecimen =  request.POST.get('testSpecimen',None)
-        with transaction.atomic():
-            laboratoryTestData = LaboratoryTest.objects.create(testName=testName,testBodySite=testBodySite,testUse=testUse,testDescription=testDescription, testSpecimen=testSpecimen)
-            prescription = Prescription.objects.get(pk=prescriptionId)
-            labTestData = LabTestPrescriptionMap.objects.create(laboratoryTestId=laboratoryTestData, prescriptionId=prescription)
-            message='Test Added Successfully!'
-        return redirect('laboratoryTest',prescriptionId,message)
+        if request.method == 'POST':
+            testName = request.POST.get('testName',None)
+            testBodySite = request.POST.get('testBodySite',None)
+            testUse = request.POST.get('testUse',None)
+            testDescription =  request.POST.get('testDescription',None)
+            testSpecimen =  request.POST.get('testSpecimen',None)
+            with transaction.atomic():
+                laboratoryTestData = LaboratoryTest.objects.create(testName=testName,testBodySite=testBodySite,testUse=testUse,testDescription=testDescription, testSpecimen=testSpecimen)
+                prescription = Prescription.objects.get(pk=prescriptionId)
+                labTestData = LabTestPrescriptionMap.objects.create(laboratoryTestId=laboratoryTestData, prescriptionId=prescription)
+            # message='Test Added Successfully!'
+            return redirect('laboratoryTest',prescriptionId)
+        else:
+            return render(request, 'labTest.html',{'prescriptionId':prescriptionId})
+        
     except:
-        message='Something Went Wrong!'
-        return redirect('laboratoryTest',prescriptionId,message)
-
+        return redirect('laboratoryTest',prescriptionId)
 @doctordata_middleware      
 def diagnosis(request, patientId):
     try:
@@ -171,24 +236,22 @@ def diagnosis(request, patientId):
                 prescriptionData = Prescription.objects.create(patientId=patient,diagnosisId=diagnosisData,medicalDevice=deviceData)
                 allMeds = Medicine.objects.all()
                 prescriptionId=prescriptionData.id
-            redirect('viewPrescription',prescriptionId)
+            return redirect('viewPrescription',prescriptionId)
         else:
             return render(request, "diagnosisPage.html",{'patient':patient})
     except Exception as e:
         print(e)
         return render(request, "diagnosisPage.html",{'patient':patient, 'message':'Something Went Wrong!'})
 
-
-@doctordata_middleware
+# @doctordata_middleware
 def medication(request, prescriptionId):
     try:
         if request.session['role']!= "Doctor":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
+        allMeds = Medicine.objects.all()
         if request.method == 'POST':
             medicineId = request.POST['medicineId']
             medicine = Medicine.objects.filter(id=medicineId).first()
-            allMeds = Medicine.objects.all()
             doseUnit = request.POST['doseUnit']
             duration = request.POST['duration']
             doseTiming = request.POST['doseTiming']
@@ -200,7 +263,7 @@ def medication(request, prescriptionId):
                 medicationDirData = MedicineDirPrescriptionMap.objects.create(prescriptionId=prescription,medicineDirectionId=medicationData)
             return render(request, "medicationPage.html",{'prescriptionId':prescriptionId, 'allMeds':allMeds, 'success':"Medicine Added Successfullty"})
         else:
-            return render(request, "medicationPage.html",{'prescriptionId':prescriptionId})
+            return render(request, "medicationPage.html",{'prescriptionId':prescriptionId,'allMeds':allMeds,})
     except Exception as e:
         print(e)
         allMeds = Medicine.objects.all()

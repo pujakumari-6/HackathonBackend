@@ -101,22 +101,22 @@
 </style>
 <script>
     function cancel(){
-        window.location.href="/doctor";  
+        window.location.href="/doctor/viewPrescription/{{ prescriptionId }}";  
     }
 </script>
 <div class="container register">
                 <div class="row">
                     <div class="col-md-3 register-left">
-                        <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
-                        <h3>Welcome</h3>
+                        <img src="http://www.downloadclipart.net/large/37802-red-stethoscope-clipart.png" alt=""/>
+                        <h3>Add Laboratory Tests</h3>
                         <p>The art of medicine consists of amusing the patient while nature cures the disease.</p>
                         <input type="submit" name="" value="Cancel" onclick="cancel()"/><br/>
                     </div>
                     <div class="col-md-9 register-right">
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <h3 class="register-heading">Add Medicine</h3>
-                                <form action="/doctor/medication/{{ prescriptionId }}" method="post">{% csrf_token %}
+                                <h3 class="register-heading">Add Laboratory Tests</h3>
+                                <form action="/doctor/laboratoryTest/{{ prescriptionId }}" method="post">{% csrf_token %}
                                     <div class="row register-form">
                                         <div class="col-md-12">
                                             {% if success %}
@@ -132,21 +132,21 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="testName" placeholder="Test Name" value="" />
+                                                <input type="text" class="form-control" name="testName" placeholder="Test Name" value="" required/>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="testSpecimen" placeholder=" Specimen" value=""  />
+                                                <input type="text" class="form-control" name="testSpecimen" placeholder=" Specimen" value=""  required/>
                                             </div>                                        
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="testBodySite" placeholder="Body Site" value="" />
+                                                <input type="text" class="form-control" name="testBodySite" placeholder="Body Site" value="" required/>
                                             </div>   
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="testUse" placeholder="Test Use" value="" />
+                                                <input type="text" class="form-control" name="testUse" placeholder="Test Use" value="" required/>
                                             </div>     
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="testDescription" placeholder="Test Description" value=""  />
+                                                <input type="text" class="form-control" name="testDescription" placeholder="Test Description" value=""  required/>
                                             </div>  
                                             <input type="submit" class="btnRegister"  value="Add"/>
                                         </div>
