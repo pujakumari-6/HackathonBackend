@@ -15,7 +15,6 @@
         margin: 0;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
-    
     table {
         position: absolute;
        
@@ -65,7 +64,6 @@
 </style>
 
 <body>
-
     <table class="table" style="max-width: 80%; margin-left:10%;">
         <tr id="header">
             <th scope="col">Patient Name</th>
@@ -93,18 +91,31 @@
                     <td>{{patient.createdDate}}</td>
                     <td>
                         <a href="/doctor/patient-list/patient/{{patient.id}}" class="btn btn-info btm-sm">View Records</a>
-                        {% if request.session.role == "Nurse" %}
+                        <!-- {% if request.session.role == "Nurse" %}
                             <a href="/healthcare/updatePatientRecord/{{patient.id}}" class="btn btn-info btm-sm">Update</a>
-                        {% endif %}
+                        {% endif %} -->
                     </td>
                 </tr>
                 {% endfor %}
             {% endif %}
-      
-
     </table>
+    <div class="pagination" style="position:fixed; bottom: 30px; right:35%">
+        <span class="step-links">
+            {% if data.has_previous %}
+                <a href="?page=1" style="text-decoration: none; color:white;background-color:#16a085;padding:5px; font-weight: 20px; font-size:20px; border:solid 1px #16a085; border-radius:2px;">&laquo; First</a>
+                <a href="?page={{ data.previous_page_number }}" style="text-decoration: none; color:white;background-color:#16a085;padding:5px; font-weight: 20px; font-size:20px; border:solid 1px #16a085; border-radius:2px;">Previous</a>
+            {% endif %}
+    
+            <span class="current" style="color:#16a085;padding:5px; font-weight: 20px; font-size:20px; margin:2px;">
+                Page {{ data.number }} of {{ data.paginator.num_pages }}.
+            </span>
+            {% if data.has_next %}
+                <a href="?page={{ data.next_page_number }}" style="text-decoration: none; color:white;background-color:#16a085;padding:5px; font-weight: 20px; font-size:20px; border:solid 1px #16a085; border-radius:2px;">Next</a>
+                <a href="?page={{ data.paginator.num_pages }}" style="text-decoration: none; color:white;background-color:#16a085;padding:5px; font-weight: 20px; font-size:20px; border:solid 1px #16a085; border-radius:2px;">Last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
  
-
 </body>
 
 </html>

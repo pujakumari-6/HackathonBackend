@@ -107,7 +107,7 @@ def patientRecord(request, patientId):
         return HttpResponse("<h1>something went wrong!!!</h1>")
         
 # update patient record
-@nurse_middleware
+# @nurse_middleware
 def updatePatientRecord(request, patientId):
     try:
         if request.session['role']!="Nurse":
