@@ -75,14 +75,20 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03" style="margin-right: 0%;">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-1">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#" style="font-size: 20px; padding-top:10px;">Home</a>
+                  <a class="nav-link active" aria-current="page" href="" style="font-size: 20px; padding-top:10px;">Home</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link active" href="/aboutUs" style="font-size: 20px; padding-top:10px;">About Us</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link active"><button type="button" class="btn btn-primary btn-sm-2" id="loginButton">Login</button></a>
-                </li>
+                {% if request.session.role %}
+                  <li class="nav-item">
+                    <a class="nav-link active" href="accounts/logout"><button type="button" class="btn btn-primary btn-sm-2" id="loginButton">Logout</button></a>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link active" href="accounts/loginpage"><button type="button" class="btn btn-primary btn-sm-2" id="loginButton">Login</button></a>
+                  </li>
+                {% endif %}
               </ul>
             </div>
           </div>
@@ -97,7 +103,7 @@
               
               <ul class="footer-menu" id="footer-menu">
                 <h3>Company</h3>
-                <li><a href="#">About Us</a></li>
+                <li><a href="/aboutUs">About Us</a></li>
                 <li><a href="#">Career</a></li>
                 <li><a href="#">Editorial Team</a></li>
                 <li><a href="#">Protection</a></li>

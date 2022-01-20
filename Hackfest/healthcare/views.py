@@ -15,9 +15,6 @@ from accounts.middleware import nurse_middleware
 @nurse_middleware
 def newPatient(request):
     try:
-        if request.session['role']!="Nurse":
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
         if request.method == 'POST':
             try:
                 name = request.POST['name']
@@ -58,12 +55,9 @@ def newPatient(request):
         return render(request, 'newPatient.html',{'message':'Something went wrong'})
 
 # Create new patient record
-@nurse_middleware
+# @nurse_middleware
 def patientRecord(request, patientId):
     try:
-        if request.session['role']!="Nurse" :
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
         patient = Patient.objects.filter(id=patientId).first()
         if request.method == 'POST':
                 patientRecord = PatientRecord.objects.filter(patientId=patientId)
