@@ -8,8 +8,11 @@ from .models import *
 from django.contrib.auth import authenticate
 from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
+from accounts.middleware import  doctor_middleware , both_middleware
 
 
+
+@both_middleware
 def doctorHome(request):
     try:
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
@@ -20,6 +23,7 @@ def doctorHome(request):
         return render(request, "index.html", {'message':'Something Went wrong'})
 
 # Patient List
+@both_middleware
 def patientList(request):
     try:
         print(request.session['role'])
@@ -90,6 +94,7 @@ def viewPrescription(request, prescriptionId):
     except Exception as e:
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")   
+@doctor_middleware
 def diagnosis(request, patientId):
     try:
         if request.session['role']!= "Doctor":
@@ -132,6 +137,7 @@ def diagnosis(request, patientId):
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")
 
+@doctor_middleware
 def medication(request, prescriptionId):
     try:
         if request.session['role']!= "Doctor":

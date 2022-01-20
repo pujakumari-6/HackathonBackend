@@ -9,10 +9,10 @@ import uuid
 from django.conf import settings
 # Create your views here.
 
-# register patient
+from accounts.middleware import nurse_middleware
 
 
-
+@nurse_middleware
 def newPatient(request):
     try:
         if request.session['role']!="Nurse":
@@ -58,6 +58,7 @@ def newPatient(request):
         return HttpResponse("<h1>something went wrong!!!</h1>")
 
 # Create new patient record
+@nurse_middleware
 def patientRecord(request, patientId):
     try:
         if request.session['role']!="Nurse" :
@@ -112,6 +113,7 @@ def patientRecord(request, patientId):
         return HttpResponse("<h1>something went wrong!!!</h1>")
         
 # update patient record
+@nurse_middleware
 def updatePatientRecord(request, patientId):
     try:
         if request.session['role']!="Nurse":

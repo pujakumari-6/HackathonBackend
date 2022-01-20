@@ -137,15 +137,16 @@
                                         
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="number" class="form-control" name="height" placeholder="Height *" value="" />
+                                                <input type="number" class="form-control" name="height" placeholder="Height in cm *"  value=""  required/>
                                             </div>
+                                            
                                             <div class="form-group">
-                                                <input type="number" class="form-control" name="weight" placeholder="Weight *" value="" />
+                                                <input type="number" class="form-control" name="weight" placeholder="Weight in kg *" value="" required/>
                                             </div>
                                             {% if patient.gender == "Female" %}
                                                 <div class="form-group">
-                                                    <select class="form-control" id="preg" name="pregnancyStatus"  onClick="isPregnant()">
-                                                        <option class="hidden"  selected disabled>Pregnancy Status</option>
+                                                    <select class="form-control" id="preg" name="pregnancyStatus"  onClick="isPregnant()" required>
+                                                        <option class="hidden" value="" selected disabled>Pregnancy Status</option>
                                                         <option value="Yes">Yes</option>
                                                         <option value="No">No</option>
                                                     </select>
@@ -156,52 +157,57 @@
                                                 </div>
                                             {% endif %}
                                             <div class="form-group">
-                                                <textarea class="form-control" name="allergies" placeholder="Allergies *" rows="5" value="" ></textarea>
+                                                <textarea class="form-control" name="allergies" placeholder="Allergies *" rows="5" value="" required ></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="bloodPressure" placeholder="Blood Pressure" value="" />
+                                                <input type="number" class="form-control" name="bloodPressure" placeholder="Blood Pressure in mm"   value="" step="any" required/>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="pulseRate" placeholder="Pulse Rate" value="" />
+                                                <input type="number" class="form-control" name="pulseRate" placeholder="Pulse Rate in BPM"   value=""  step="any" required/>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="bodyTemprature" placeholder="Body Temprature" value="" />
+                                                <input type="number" class="form-control" name="bodyTemprature" placeholder="Body Temprature in (°F) " value="" step="any" required/>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <select class="form-control" name="isAlcolohic">
-                                                    <option class="hidden"  selected disabled>Alcoholic</option>
+                                                <select class="form-control" name="isAlcolohic" required>
+                                                    <option class="hidden" value=""  selected disabled>Alcoholic</option>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group">
+                                                
+                                                <select class="form-control" name="isSmoker" required>
+                                                    
+                                                    <option class="hidden" value=""  selected disabled>Smoker</option>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <select class="form-control" name="isDiabetic" required>
+                                                    
+                                                    <option class="hidden" value="" selected disabled>Diabetic</option>
                                                     <option value="Yes">Yes</option>
                                                     <option value="No">No</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <select class="form-control" name="isSmoker">
-                                                    <option class="hidden"  selected disabled>Smoker</option>
-                                                    <option value="Yes">Yes</option>
-                                                    <option value="No">No</option>
-                                                </select>
+                                                <input type="text" class="form-control" name="insurancePlanName" placeholder="Insurance Plan Name*" value="" pattern="[a-zA-Z0-9]*" required/>
                                             </div>
                                             <div class="form-group">
-                                                <select class="form-control" name="isDiabetic">
-                                                    <option class="hidden"  selected disabled>Diabetic</option>
-                                                    <option value="Yes">Yes</option>
-                                                    <option value="No">No</option>
-                                                </select>
+                                                <input type="text" class="form-control" name="insurancePlanNumber" placeholder="Insurance Number*" value=""  pattern="[a-zA-Z0-9]*" required/ >
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="insurancePlanName" placeholder="Insurance Plan Name*" value="" />
+                                                <textarea class="form-control" name="previousSurgery" placeholder="Any Previous Surgery *" rows="5" value="" required > </textarea>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="insurancePlanNumber" placeholder="Insurance Number*" value="" />
-                                            </div>
-                                            <div class="form-group">
-                                                <textarea class="form-control" name="previousSurgery" placeholder="Any Previous Surgery *" rows="5" value="" ></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <select class="form-control" name="status">
-                                                    <option class="hidden"  selected disabled>Status</option>
+                                                <select class="form-control" name="status" required>
+                                                    <option class="hidden" value=""  selected disabled>Status</option>
                                                     <option value="Recovered">Recovered</option>
                                                     <option value="Under Treatment">Under Treatment</option>
                                                 </select>
