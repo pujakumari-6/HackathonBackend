@@ -185,6 +185,7 @@ def viewPrescription(request, prescriptionId):
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")   
 
+
 @doctordata_middleware
 def laboratoryTest(request,prescriptionId):
     try:
@@ -234,7 +235,7 @@ def diagnosis(request, patientId):
                 prescriptionData = Prescription.objects.create(patientId=patient,diagnosisId=diagnosisData,medicalDevice=deviceData)
                 allMeds = Medicine.objects.all()
                 prescriptionId=prescriptionData.id
-            redirect('viewPrescription',prescriptionId)
+            return redirect('viewPrescription',prescriptionId)
         else:
             return render(request, "diagnosisPage.html",{'patient':patient})
     except Exception as e:
