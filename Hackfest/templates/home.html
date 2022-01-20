@@ -126,7 +126,20 @@
        <div class="container text-center wow zoomIn">
          <span class="subhead" style="font-size:50px;">Let's make your life happier</span>
          <h1 class="display-4" style="font-size: 100px;">Healthy Living</h1>
-         <a href="#" class="btn btn-primary btn-lg zoomOut" id="button1">View Prescriptions </a>
+         {% if request.session.role %}
+            {% if request.session.role == 'Admin' %}
+              <a href="/accounts/createdoctor/" class="btn btn-primary btn-lg zoomOut" id="button1">Create Doctor </a>
+              <a href="/accounts/createnurse/" class="btn btn-primary btn-lg zoomOut" id="button1">Create Nurse </a>
+              {% elif request.session.role == 'Doctor' %}
+                <a href="/doctor/patient-list/" class="btn btn-primary btn-lg zoomOut" id="button1">View Patients </a>
+              {% else %}
+                <a href="/doctor/patient-list/" class="btn btn-primary btn-lg zoomOut" id="button1">View Patient </a>
+                <a href="/healthcare/newPatient" class="btn btn-primary btn-lg zoomOut" id="button1">Register Patient</a>
+            {% endif %}
+           {% else %}
+           <a href="/registrationNo" class="btn btn-primary btn-lg zoomOut" id="button1">View Prescriptions </a>
+         {% endif %}
+         
        </div>
      </div>
    </div>

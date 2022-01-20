@@ -12,8 +12,6 @@ def auth_middleware(get_response):
         return response
     return Admin
 
-
-
 def doctor_middleware(get_response):
     def doctor(request):
         if request.session.get("role") != "Doctor":  
@@ -38,5 +36,17 @@ def nurse_middleware(get_response):
         response = get_response(request)
         return response
     return nurse
+
+def auth_param_middleware(get_response):
+    def Admin(request,roledata):
+        if request.session.get("role") != "Admin":  
+
+            return redirect('/accounts/loginpage')
+   
+        response = get_response(request,roledata)
+        return response
+    return Admin
+
+
 
  
