@@ -5,7 +5,7 @@ from healthcare.models import Patient
 # Create your views here.
 def homePage(request):
     try:
-        return render(request, 'homePage.html', {})
+        return render(request, 'home.html', {})
     except Exception as e:
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")    

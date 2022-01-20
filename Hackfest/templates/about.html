@@ -1,39 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <head>
+        <style>
+            #about{
+                display: grid;
+                padding: 2rem;
+                grid-template-columns: 600px 2fr;
+                gap: 0.7rem;
+                align-items: center;
+                max-width: 1200px;
+                margin: 0 auto;
+                
+            }
+            #aboutImage{
+                max-width: 100%;
+                height: auto;
+            }
 
-    <!-- custom css file link  -->
-    <link rel="stylesheet" href= '{% static "styles.css" %}'>
-
-</head>
-<body>
-    <section class="about" id="about">
-
-        <h1 class="heading"> <span>about</span> us </h1>
-    
-        <div class="row">
-    
-            <div class="image">
-                <img src='{% static "/home-img.svg" %}' alt="">
-            </div>
-    
-            <div class="content">
-                <h3></h3>
-                <p>We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.</p>
-                <p></p>
-            </div>
-    
+            @media (max-width: 650px) {
+                #about {
+                  display: block;
+                  font-size: 80%;
+                }
+            }
+        </style>
+    </head>
+    <div class="container-fluid" id="about">
+        <div class="container-fluid" class="aboutImage" >
+            <img class="img-fluid"  src='{% static "/home-img.svg" %}' alt="" height="700" width="700"> 
         </div>
-    
-    </section>
-    <!-- {% include "footer.html" %} -->
-</body>
+        <div class="container-fluid" id="aboutContent">
 
-</html>
+            <p>We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.We leave no stone unturned in taking care of those who are in need. The doctors with years of experience in the medical field are there to help you.</p>
+            <p>Let us all togther be there and work for it. Hello </p>
+        </div>
 
+    </div>
+{% endblock %}
