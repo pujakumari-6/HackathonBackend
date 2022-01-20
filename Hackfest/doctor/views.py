@@ -12,6 +12,21 @@ from accounts.middleware import  doctor_middleware , both_middleware
 
 
 
+
+def searchPatient(request):
+    try:
+        print(request.session['role'])
+        if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
+            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
+        if request.method == 'POST':
+            searched = request.POST['searched']
+            data = Patient.objects.filter(name__contains=searched)
+            return render(request, "patientlist.html", {'data':data})   
+    
+    except Exception as e:
+        print(e)
+        return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
+    
 @both_middleware
 def doctorHome(request):
     try:
@@ -26,7 +41,7 @@ def doctorHome(request):
 @both_middleware
 def patientList(request):
     try:
-        print(request.session['role'])
+        #print(request.session['role'])
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
 
@@ -40,6 +55,7 @@ def patientList(request):
 def patientRecord(request, patientId):
     try:
         patientDetails = Patient.objects.get(pk=patientId)
+        print(patientDetails.name)
         history = PatientRecord.objects.get(patientId=patientId)
         allPrescription = Prescription.objects.filter(patientId=patientDetails)
         prescriptionListData = []
