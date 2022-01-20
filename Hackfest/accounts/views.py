@@ -7,6 +7,7 @@ from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
 from django.contrib import messages 
+
 from .middleware import auth_middleware, check_middleware
 
 
@@ -90,7 +91,7 @@ def docter_login(request):
             pwd=request.POST.get('pwd',None)
             ubj= authenticate(request, username=email, password=pwd) 
             if ubj == None:
-                messages.add_message(request, messages.ERROR, "invalid credentials")
+                messages.add_message(request, messages.ERROR, "Invalid credentials!")
                 return redirect('/accounts/loginpage')
 
             q = User.objects.filter(username=email).filter(is_staff=True)
@@ -98,12 +99,11 @@ def docter_login(request):
             userRole= Role.objects.filter(id=table1_data.role_id.id).first()
             request.session["role"]=userRole.role
             if q and ubj:
-                messages.add_message(request, messages.SUCCESS, "Welcome !!")
-                return redirect("/accounts/choise/")
+                messages.add_message(request, messages.SUCCESS, "Welcome Back")
+                return redirect("")
             else:
-
-                return render( request, 'doctor.html',  {'msg': "please add valid data !"})
-
+                messages.add_message(request, messages.SUCCESS, "Welcome Back")
+                return redirect("")
         else:
             return render(request, 'index.html')
     except Exception as e:

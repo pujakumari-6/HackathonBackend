@@ -15,9 +15,6 @@ from accounts.middleware import nurse_middleware,nursedata_middleware
 @nurse_middleware
 def newPatient(request):
     try:
-        if request.session['role']!="Nurse":
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
         if request.method == 'POST':
             try:
                 name = request.POST['name']
@@ -52,18 +49,16 @@ def newPatient(request):
             finally:
                 return render(request, 'newPatient.html',{'success':True, 'patientId':patientData.id})
         else:
-                return render(request, 'newPatient.html')
+            return render(request, 'newPatient.html')
     except Exception as e:
         print(e)
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+        return render(request, 'newPatient.html',{'message':'Something went wrong'})
 
 # Create new patient record
+
 @nursedata_middleware
 def patientRecord(request, patientId):
     try:
-        if request.session['role']!="Nurse" :
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
         patient = Patient.objects.filter(id=patientId).first()
         if request.method == 'POST':
                 patientRecord = PatientRecord.objects.filter(patientId=patientId)

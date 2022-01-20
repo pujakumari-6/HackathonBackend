@@ -264,15 +264,6 @@ footer a {
  </style>   
 </head>
 <body>
-	{%if messages%}
-	{% for message in messages%}
-	<div class="alert alert-danger" style="text-align: center; width:100%" role="alert" >
-	  {{message}}
-	</div>
-	{% endfor %}
-	{% endif %}
-	
-
 	<div class="col-md-12 ">
 
 		
@@ -284,9 +275,6 @@ footer a {
 
       <form action="loginpage" method="post">
         {% csrf_token %}
-		
-		
-
         <h1>Sign in</h1>
        
         <input type='text' placeholder="Email" name='eml'>

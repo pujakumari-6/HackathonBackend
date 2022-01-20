@@ -25,6 +25,7 @@ def check_middleware(get_response):
     
 
 
+
 def doctor_middleware(get_response):
     def doctor(request):
         if request.session.get("role") != "Doctor":  
@@ -33,14 +34,28 @@ def doctor_middleware(get_response):
         response = get_response(request)
         return response
     return doctor
+
+
 def doctordata_middleware(get_response):
-    def doctor(request, newdata):
+    def doctor(request, patientId):
         if request.session.get("role") != "Doctor":  
             return redirect('/accounts/loginpage')
    
-        response = get_response(request, newdata)
+        response = get_response(request, patientId)
         return response
     return doctor
+
+def doctordata1_middleware(get_response):
+    def doctor(request, patientId):
+        if request.session.get("role") != "Doctor":  
+            return redirect('/accounts/loginpage')
+   
+        response = get_response(request, patientId)
+        return response
+    return doctor
+
+
+
 
 def both_middleware(get_response):
     def both(request):
@@ -72,10 +87,10 @@ def nurse_middleware(get_response):
 
  
 def nursedata_middleware(get_response):
-    def nurse(request, roledata):
+    def nurse(request, patientId):
         if request.session.get("role") !="Nurse":
             return redirect('/accounts/loginpage')
-        response = get_response(request, roledata)
+        response = get_response(request, patientId)
         return response
     return nurse
  
