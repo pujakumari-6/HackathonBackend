@@ -5,7 +5,7 @@ from healthcare.models import Patient
 # Create your views here.
 def homePage(request):
     try:
-        return render(request, 'homePage.html', {})
+        return render(request, 'home.html', {})
     except Exception as e:
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")    
@@ -22,12 +22,15 @@ def registrationNo(request):
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")        
 def registrationNoSubmit(request):
-    try:
+    # try:
         registrationNumber = request.POST['registerId']
-        patient = Patient.objects.filter(registrationNumber=registrationNumber).first()
-        patientId=patient.id
-        return redirect('patientDiagnosis',patientId)
-    except Exception as e:
-        print(e)
-        return HttpResponse("<h1>something went wrong!!!</h1>")        
+        patient = Patient.objects.filter(registrationNumber=registrationNumber)
+        if(patient.exists()):
+            patientId=patient.first().id
+            return redirect('patientDiagnosis',patientId)
+        else:
+            return HttpResponse("<h1>No records found!!</h1>")     
+    # except Exception as e:
+    #     print(e)
+    #     return HttpResponse("<h1>something went wrong!!!</h1>")        
     

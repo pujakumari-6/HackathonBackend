@@ -28,22 +28,29 @@
                 <li class="nav-item " data-tab-target="#BasicDetails" class="activeDiv" >
                   <a class="nav-link active" href="#" style="background-color: #16a085;" >Basic Details</a>
                 </li>
-                <li class="nav-item"  data-tab-target="#MedicalHistory">
-                    <a class="nav-link active" href="#" style="background-color: #16a085;" >Medical History</a>
-                  </li>
-                  <li class="nav-item" data-tab-target="#Prescriptions">
-                    <a class="nav-link active" href="#" style="background-color: #16a085;" >Prescriptions</a>
-                  </li>
+                {% if noRecord %}
+                    
+                  {% else %}
+                    <li class="nav-item"  data-tab-target="#MedicalHistory">
+                      <a class="nav-link active" href="#" style="background-color: #16a085;" >Medical History</a>
+                    </li>
+                    <li class="nav-item" data-tab-target="#Prescriptions">
+                      <a class="nav-link active" href="#" style="background-color: #16a085;" >Prescriptions</a>
+                    </li>
+                {% endif %}
+                
               </ul>
             </div>
         </div>
-
         <div class="tab-content">
             <div id="BasicDetails" data-tab-content class="activeDiv">
+                {% if noRecord %}
                 <h1>Basic Details 
-                    <a href="#" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Add Record</a>
-
+                    <a href="/healthcare/patientRecord/{{details.id}}" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Add Record</a>
                 </h1>
+                 {% else %}
+                 <h1>Basic Details</h1>
+                {% endif %}
                 <div class="card-body pt-0" id="table1">
                     <table class="table table-bordered" >
                       <tr>
@@ -84,10 +91,10 @@
             </div>
             <div id="MedicalHistory" data-tab-content>
                 <h1>Medical History
-                    <a href="#" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Update</a>
-
+                  {% if request.session.role == "Nurse" %}
+                    <a href="/healthcare/updatePatientRecord/{{details.id}}" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Update</a>
+                  {% endif %}
                 </h1>
-
                 <div class="card-body pt-0" id="table2">
                     <table class="table table-bordered">
                       <tr>
@@ -191,6 +198,7 @@
                                 <td>{{data.diagnosisName}}</td>
                                   <td>
                                       <a href="/doctor/viewPrescription/{{data.prescriptionId}}" class="btn btn-info btm-sm" style="background-color: #16a085; color:white; ">View Diagnosis</a>
+                                      <a href="/doctor/medicineFile/{{data.prescriptionId}}" class="btn btn-info btm-sm" style="background-color: #16a085; color:white; ">Download Prescriptions</a>
                                   </td>
                       </tr>
                           
