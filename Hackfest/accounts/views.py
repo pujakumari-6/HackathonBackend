@@ -6,10 +6,14 @@ import uuid
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
+from django.contrib import messages 
+from .middleware import auth_middleware
 
-# Create your views here.
+
+@auth_middleware
 def choiseview(request):
     try:
+
         if request.session['role']== "Admin":
             return render(request, 'choise.html' )
         else:
@@ -18,78 +22,88 @@ def choiseview(request):
         return render(request, 'index.html', {'messages': "something went wrong!!"})
 
 
-def doctor_register(request, roleid):
+# @auth_middleware
+def doctor_register(request, roledata):
     try:
-        if request.session['role']!= "Admin":
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-    
-        elif request.method =='POST':
+        if request.method =='POST':
             uname=request.POST.get('uname',None)
             email=request.POST.get('eml',None)
             pwd=request.POST.get('pwd',None)
 
-            if User.objects.filter(username=uname).exists():
+            if User.objects.filter(username=email).exists():
+                messages.add_message(request, messages.ERROR, "User Already Exists")
                 return redirect('/accounts/choise/')
             else:
-                user_obj=User.objects.create(username=uname,password=pwd,email=email)
+                user_obj=User.objects.create(username=email,password=pwd,email=email)
                 user_obj.set_password(pwd)
                 user_obj.save()
-                if roleid == 1:
-                    role_data = Role.objects.filter(role='Doctor').first()
-                    userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
+                if roledata == 'Doctor':
+                    role_name = Role.objects.filter(role='Doctor').first()
+                    print(role_name.id)
+                    userRole= UserroleMap.objects.create(user_id=user_obj, role_id=role_name)
                     userRole.save()
-                    return redirect('/accounts/choise/')
+                    messages.add_message(request, messages.SUCCESS, "Doctor is created")
+                    return redirect('')
                 else:
-                    role_data = Role.objects.filter(role='Nurse').first()
+                   
+                    role_name = Role.objects.filter(role='Nurse').first()
             
-                    userRole= UserroleMap.objects.create(user_id=user_obj.id, role_id=roleid)
+                    userRole= UserroleMap.objects.create(user_id=user_obj, role_id=role_name)
                     userRole.save()
-                    return redirect('/accounts/choise/')
+                    messages.add_message(request, messages.SUCCESS, "Nurse is created")
 
-        return render(request, 'ragister.html', {'messages': 'Please Add Valid Details !'})
+                    return redirect('')
+
+        return render(request, 'ragister.html', {'messages': 'Please Add Valid Details !'})    
     except Exception as e:
+        print("admin")
         print(e)
         return render(request, 'index.html', {'messages': "Something Went Wrong!!"})
 
-
+@auth_middleware
 def addNurse(request):
     try:
         if request.session['role']!= "Admin":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-        data={'roleid': 2 , 'message': "Register Nurse"}
+        data={'roledata': 'Nurse' , 'message': "Register Nurse"}
         return  render(request, 'ragister.html', context= data )
     except:
+        print("nurse1")
         return render(request, 'index.html', {'messages': "something went wrong!!"})
 
-
+@auth_middleware
 def addDoctor(request):
     try:
         if request.session['role']!= "Admin":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-        data={'roleid': 1 , 'message': "Register Doctor"}
+        data={'roledata': 'Doctor' , 'message': "Register Doctor"}
         return  render(request, 'ragister.html', context= data )
     except:
+        print("nurse2")
         return render(request, 'index.html', {'messages': "something went wrong!!"})
 
 
 def docter_login(request):
     try:
         if request.method =='POST':
-            uname=request.POST.get('uname',None)
+            email=request.POST.get('eml',None)
             pwd=request.POST.get('pwd',None)
-            ubj= authenticate(request, username=uname, password=pwd) 
+            ubj= authenticate(request, username=email, password=pwd) 
             if ubj == None:
-                messages="Please enter valid details!!!"
+                messages.add_message(request, messages.ERROR, "invalid credentials")
                 return redirect('/accounts/loginpage')
 
-            q = User.objects.filter(username=uname).filter(is_staff=True)
+            q = User.objects.filter(username=email).filter(is_staff=True)
             table1_data= UserroleMap.objects.filter(user_id=ubj.id).first()
-            userRole= Role.objects.filter(id=table1_data.role_id).first()
-            request.session["role"]=userRole.role  
+            userRole= Role.objects.filter(id=table1_data.role_id.id).first()
+            request.session["role"]=userRole.role
             if q and ubj:
+                messages.add_message(request, messages.SUCCESS, "Welcome !!")
                 return redirect("/accounts/choise/")
             else:
-                return render( request, 'doctor.html',  {'messages': "please add valid data !"})
+
+                return render( request, 'doctor.html',  {'msg': "please add valid data !"})
+
         else:
             return render(request, 'index.html')
     except Exception as e:

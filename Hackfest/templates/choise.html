@@ -280,6 +280,14 @@ footer a {
  </style>   
 </head>
 <body>
+
+	{%if messages%}
+	{% for message in messages%}
+	<div class="alert alert-sucess" style="text-align: center; width:100%" role="alert" >
+	  {{message}}
+	</div>
+	{% endfor %}
+	{% endif %}
 	<header style="position:fixed; top:0px;width: 100%; height: 70px; background-color: #16a085;">
         <ul style="position: fixed; right:20px; top:10px; list-style-type: none;">
             <li><a href="/accounts/logout" class="logoutbtn">Sign out</a></li>

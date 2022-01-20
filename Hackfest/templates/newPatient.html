@@ -132,11 +132,12 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="name" placeholder="Name *" value="" />
+                                                <input type="text" class="form-control" name="name" placeholder="Name *" pattern="[a-zA-Z'-'\s]*" value="" required/>
                                             </div>
                                             <div class="form-group">
-                                                <select class="form-control" name="gender">
-                                                    <option class="hidden"  selected disabled>Gender</option>
+                                                <select class="form-control" name="gender" required>
+                    
+                                                    <option class="hidden" value=""  selected disabled >Gender</option>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
                                                     <option value="Other">Other</option>
@@ -144,20 +145,21 @@
                                             </div>
                                             <div class="form-group">
                                                 <input placeholder="Date Of Birth *" type="text" name="dateOfBirth" class="form-control" value="" onfocus="(this.type='date')"
-                                                onblur="(this.type='text')"/>
+                                                onblur="(this.type='text')" required/>
                                             </div>
                                             
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="email" class="form-control" name="email" placeholder="Your Email *" value="" />
+                                                <input type="email" class="form-control" name="email" placeholder="Your Email *" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" value="" required/>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" minlength="10" maxlength="10" name="mobile" class="form-control" placeholder="Your Phone *" value="" />
+                                                <input type="text" minlength="10" maxlength="10" name="mobile" class="form-control" pattern="[0-9]+" placeholder="Your Phone *" value="" required/>
                                             </div>
                                             <div class="form-group">
-                                                <select class="form-control" name="bloodGroup">
-                                                    <option class="hidden"  selected disabled>Blood Group</option>
+                                                <select class="form-control" name="bloodGroup" required >
+                                                    <option class="hidden"  value="" selected disabled >Blood Group</option>
+                                                    
                                                     <option value="A+">A+</option>
                                                     <option value="B+">B+</option>
                                                     <option value="O+">O+</option>

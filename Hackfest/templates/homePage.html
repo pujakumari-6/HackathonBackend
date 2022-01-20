@@ -140,11 +140,22 @@ nav .menu{
           <li><a href="accounts/loginpage">Sign in</a></li>
         {% endif %}
         
-        
       </ul>
     </div>
   </nav>
+
   <div class="img"></div>
+
+  {%if messages%}
+  {% for message in messages%}
+  {% if message.tag == SUCCESS%}
+  <div class="alert alert-success" role="alert">
+    {{message}}
+  </div>
+  {% endif %}
+  {% endfor %}
+
+  {% endif %}
   <div class="center" style="margin:0">
     <div class="title">Take care of your health</div>
     <div class="sub_title">It may serve you to serve God</div>
