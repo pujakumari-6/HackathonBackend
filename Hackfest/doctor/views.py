@@ -8,9 +8,71 @@ from .models import *
 from django.contrib.auth import authenticate
 from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
-
-from accounts.middleware import  doctor_middleware , both_middleware
+from accounts.middleware import  doctor_middleware , both_middleware,doctordata_middleware, bothdata_middleware
 from django.db import transaction
+
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
+def medicineFile(request, prescriptionId):
+   
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize= letter, bottomup= 0)
+    textob= c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica", 16)
+    p=("Patient Name-")
+    textob.textLine(p)
+    prescription = Prescription.objects.get(pk=prescriptionId)
+    patient = Patient.objects.get(pk=prescription.patientId.id)
+    diagnosis = Diagnosis.objects.get(pk=prescription.diagnosisId.id)
+    medicinDirMap = MedicineDirPrescriptionMap.objects.filter(prescriptionId=prescription)
+    textob.textLine(patient.name)
+    q=("Diagnosis Name-")
+    textob.textLine(q)
+    textob.textLine(diagnosis.diagnosisName)
+    r=("----------------------------------------------------------")
+    textob.textLine(r)
+    t=("[MEDICINES]")
+    textob.textLine(t)
+    if len(medicinDirMap) != 0:
+            print('in if')
+            medsDirList = []
+            for entry in medicinDirMap:
+                medsDir = MedicineDirection.objects.filter(pk=entry.medicineDirectionId.id).first()
+                medsName = Medicine.objects.filter(pk=medsDir.medicineId.id).first()
+                medsDirList.append({
+                    'medsDir':medsDir,
+                    'medsName':medsName
+                })
+            lines = []
+            for meds in medsDirList:
+                lines.append("Name-")
+                lines.append(meds['medsName'].name)
+                lines.append("Dose Unit-")
+                lines.append(meds['medsDir'].doseUnit)
+                lines.append("Duration-")
+                lines.append(meds['medsDir'].duration)
+                lines.append("Number Of Times-")
+                lines.append(meds['medsDir'].doseTiming)
+                lines.append("Instruction-")
+                lines.append(meds['medsDir'].additionalInstruction)
+                lines.append("Reason-")
+                lines.append(meds['medsDir'].reason)
+                lines.append("----------------------------------------------------------")
+            
+            for line in lines:
+                textob.textLine(line)
+    c.drawText(textob) 
+    c.showPage() 
+    c.save()  
+    buf.seek(0)
+    return FileResponse(buf, as_attachment=True, filename='medicine.pdf')
+
+
 
 @both_middleware
 def searchPatient(request):
@@ -38,7 +100,7 @@ def doctorHome(request):
         return render(request, "index.html", {'message':'Something Went wrong'})
 
 # Patient List
-# @both_middleware
+@both_middleware
 def patientList(request):
     try:
         #print(request.session['role'])
@@ -123,7 +185,8 @@ def viewPrescription(request, prescriptionId):
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")   
 
-# @doctor_middleware
+
+@doctordata_middleware
 def laboratoryTest(request,prescriptionId):
     try:
         testName = request.POST.get('testName',None)
@@ -141,7 +204,7 @@ def laboratoryTest(request,prescriptionId):
         message='Something Went Wrong!'
         return redirect('laboratoryTest',prescriptionId,message)
 
-# @doctor_middleware      
+@doctordata_middleware      
 def diagnosis(request, patientId):
     try:
         if request.session['role']!= "Doctor":
@@ -179,7 +242,8 @@ def diagnosis(request, patientId):
         print(e)
         return render(request, "diagnosisPage.html",{'patient':patient, 'message':'Something Went Wrong!'})
 
-# @doctor_middleware
+
+@doctordata_middleware
 def medication(request, prescriptionId):
     try:
         if request.session['role']!= "Doctor":

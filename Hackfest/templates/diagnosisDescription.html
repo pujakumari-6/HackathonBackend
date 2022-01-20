@@ -1,169 +1,322 @@
+{% extends "base.html"%}
 {% load static %}
+
+
+
+{% block content %} 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Patient Profile</title>
-
-    <meta name="author" content="Codeconvey" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet"><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
-<link rel="stylesheet" href= '{% static "profile.css" %}'>
-    <!--Only for demo purpose - no need to add.-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+         
+        [data-tab-content] {
+            display: none;
+          }
+          
+          .active[data-tab-content] {
+            display: block;
+          }
+          .custom-basic li{
+              padding: 10px;
+          }
     
-    <script>   
-        function myFunction2(){
-          var x = document.getElementById("table1");
-          if (x.style.display==="none"){
-            x.style.display = "block";
+        img{
+            height:150px;
+            width:100%;
           }
-          else{
-            x.style.display="none";
+          
+          .item{
+            padding-left:5px;
+            padding-right:5px;
+           
           }
-        }
-    </script>
-	    
-</head>
-<body style="background-color:#16a085 ;">
-<section>
-  <br>
-    <div class="rt-container">
-          <div class="col-rt-12">
-              <div class="Scriptcontent">
-                <!-- Student Profile -->
-                <div class="student-profile py-4">
-                  <div class="container">
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="card shadow-sm">
-                          <div class="card-header bg-transparent border-0">
-                            <h3 class="mb-0"><button onclick="myFunction2()"><i class="far fa-clone pr-1"></i></button>Diagnosis Details</h3>
-                          </div>
-                          <div class="card-body pt-0" id="table1">
-                            <table class="table table-bordered" >
-                              <tr>
-                                <th width="30%"> Diagnosis Name</th>
-                                <td width="2%">:</td>
-                                <td>{{data.diagnosis.diagnosisName}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Diagnosis Body Part</th>
-                                <td width="2%">:</td>
-                                <td>{{data.diagnosis.diagnosisBodySite}}</td>
-                              </tr>
-                              
-                              <tr>
-                                <th width="30%">Onset Date</th>
-                                <td width="2%">:</td>
-                                <td>{{data.diagnosis.dateOfOnset}}</td>
-                              </tr>
+          .item-card{
+            transition:0.5s;
+            cursor:pointer;
+            background-color:#16a085 
+          }
+          .item-card-title{  
+            font-size:25px;
+            transition:1s;
+            cursor:pointer;
+           
+            background-color:#16a085 
+          }
+          .item-card-title i{  
+            font-size:30px;
+            transition:1s;
+            cursor:pointer;
             
-                              <tr>
-                                <th width="30%">Severity</th>
-                                <td width="2%">:</td>
-                                <td>{{data.diagnosis.severity}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Abatement Date</th>
-                                <td width="2%">:</td>
-                                <td>{{data.diagnosis.dateOfAbatement}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Diagnosis Certainity</th>
-                                <td width="2%">:</td>
-                                <td>{{data.diagnosis.diagnosisCertainity}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Diagnosis Description</th>
-                                <td width="2%">:</td>
-                                <td>{{data.diagnosis.diagnosisDescription}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Medical Device Used</th>
-                                <td width="2%">:</td>
-                                <td>{{data.medicalDevice.deviceName}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Device Body Site</th>
-                                <td width="2%">:</td>
-                                <td>{{data.medicalDevice.deviceBodySite}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Use For</th>
-                                <td width="2%">:</td>
-                                <td>{{data.medicalDevice.deviceUse}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Device Description</th>
-                                <td width="2%">:</td>
-                                <td>{{data.medicalDevice.deviceDscription}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Test Name</th>
-                                <td width="2%">:</td>
-                                <td>{{data.laboratoryTest.testName}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Test Specimen</th>
-                                <td width="2%">:</td>
-                                <td>{{data.laboratoryTest.testSpecimen}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Test Body Site</th>
-                                <td width="2%">:</td>
-                                <td>{{data.laboratoryTest.testBodySite}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Test Use</th>
-                                <td width="2%">:</td>
-                                <td>{{data.laboratoryTest.testUse}}</td>
-                              </tr>
-                              <tr>
-                                <th width="30%">Test Description</th>
-                                <td width="2%">:</td>
-                                <td>{{data.laboratoryTest.testDescription}}</td>
-                              </tr>
-                            </table>
-                          </div>
-                        </div>
-                        <div style="height: 26px;"></div>
-                            <div class="row" style="display: flex;" > 
-                              {% for meds in data.medsDirList %}
-                                    <div class="col mb-4">
-                                      <div class="card h-100" >
-                                        <div class="card-body">
-                                            <h5 class="card-title" style="text-align: center">{{ meds.medsName.name }}</h5>
-                                            <ul class="list-group list-group-flush">
-                                              <li class="list-group-item">Dose Unit: {{ meds.medsDir.doseUnit }}</li>
-                                              <li class="list-group-item">Duration: {{ meds.medsDir.duration }}</li>
-                                              <li class="list-group-item">Number Of Times: {{ meds.medsDir.doseTiming }}</li>
-                                              <li class="list-group-item">Additional Instruction: {{ meds.medsDir.additionalInstruction }}</li>
-                                              <li class="list-group-item">Reason: {{ meds.medsDir.reason }}</li>
-                                            </ul>
-                                          
-                                        </div>
-                                      </div>
-                                    </div>
-                                    {% endfor %}
-                          </div>
-                          
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- partial -->
-                
+          }
+          .card-title i:hover{
+            transform: scale(1.25) rotate(100deg); 
+            color:#18d4ca;
+            
+          }
+          .card:hover{
+            transform: scale(1.05);
+            box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+          }
+          .card-text{
+            height:80px;  
+          }
+          
+          .card::before, .card::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: scale3d(0, 0, 1);
+            transition: transform .3s ease-out 0s;
+            background: rgba(255, 255, 255, 0.1);
+            content: '';
+            pointer-events: none;
+          }
+          .card::before {
+            transform-origin: left top;
+          }
+          .card::after {
+            transform-origin: right bottom;
+          }
+          .card:hover::before, .card:hover::after, .card:focus::before, .card:focus::after {
+            transform: scale3d(1, 1, 1);
+          }
+          table {
+        
+       
+        border-collapse: collapse;
+        width: 80%;
+       
+        border: 4px solid #bdc3c7;
+        box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    tr {
+        transition: all .2s ease-in;
+        
+    }
+    
+    th,
+    td {
+        padding: 4px;
+        text-align: center;
+        border-bottom: 2px solid #ddd;
+    }
+    
+    #header {
+        background-color: #16a085;
+        color: #fff;
+    }
+    
+    table h1 {
+        font-weight: 600;
+        text-align: center;
+        background-color: #16a085;
+        color: #fff;
+       
+    }
+    
+    tr:hover {
+        background-color: #f5f5f5;
+        transform: scale(1.04);
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    @media only screen and (max-width: 80%) {
+        table {
+            width: 90%;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="card text-center custom-basic">
+            <div class="card-header">
+              <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item " data-tab-target="#BasicDetails" class="active" >
+                  <a class="nav-link active" href="#" style="background-color: #16a085;" >Diagnosis Details</a>
+                </li>
+                <li class="nav-item"  data-tab-target="#MedicalHistory">
+                    <a class="nav-link active" href="#" style="background-color: #16a085;" >Device Details</a>
+                  </li>
+                  <li class="nav-item" data-tab-target="#Prescriptions">
+                    <a class="nav-link active" href="#" style="background-color: #16a085;" >Tests</a>
+                  </li>
+                  <li class="nav-item" data-tab-target="#Medicines">
+                    <a class="nav-link active" href="#" style="background-color: #16a085;" >Medicines</a>
+                  </li>
+              </ul>
+            </div>
         </div>
-		</div>
-    </div>
-</section>
-     
 
+        <div class="tab-content">
+            <div id="BasicDetails" data-tab-content class="active">
+                <h1>Diagnosis Details   <a href="#" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Add Medicine</a></h1>
+                
+                <div class="card-body pt-0" id="table1">
+                    <table class="table table-bordered" >
+                        <tr>
+                            <th width="30%"> Diagnosis Name</th>
+                            <td width="2%">:</td>
+                            <td>{{data.diagnosis.diagnosisName}}</td>
+                          </tr>
+                          <tr>
+                            <th width="30%">Diagnosis Body Part</th>
+                            <td width="2%">:</td>
+                            <td>{{data.diagnosis.diagnosisBodySite}}</td>
+                          </tr>
+                          
+                          <tr>
+                            <th width="30%">Onset Date</th>
+                            <td width="2%">:</td>
+                            <td>{{data.diagnosis.dateOfOnset}}</td>
+                          </tr>
+        
+                          <tr>
+                            <th width="30%">Severity</th>
+                            <td width="2%">:</td>
+                            <td>{{data.diagnosis.severity}}</td>
+                          </tr>
+                          <tr>
+                            <th width="30%">Abatement Date</th>
+                            <td width="2%">:</td>
+                            <td>{{data.diagnosis.dateOfAbatement}}</td>
+                          </tr>
+                          <tr>
+                            <th width="30%">Diagnosis Certainity</th>
+                            <td width="2%">:</td>
+                            <td>{{data.diagnosis.diagnosisCertainity}}</td>
+                          </tr>
+                          <tr>
+                            <th width="30%">Diagnosis Description</th>
+                            <td width="2%">:</td>
+                            <td>{{data.diagnosis.diagnosisDescription}}</td>
+                          </tr>
+                    </table>
+                  </div>
 
-    <!-- Analytics -->
+            </div>
+            <div id="MedicalHistory" data-tab-content>
+                <h1>Device Details</h1>
+                <div class="card-body pt-0" id="table2">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Medical Device Used</th>
+                            <td width="2%">:</td>
+                            <td>{{data.medicalDevice.deviceName}}</td>
+                          </tr>
+                          <tr>
+                            <th width="30%">Device Body Site</th>
+                            <td width="2%">:</td>
+                            <td>{{data.medicalDevice.deviceBodySite}}</td>
+                          </tr>
+                          <tr>
+                            <th width="30%">Use For</th>
+                            <td width="2%">:</td>
+                            <td>{{data.medicalDevice.deviceUse}}</td>
+                          </tr>
+                          <tr>
+                            <th width="30%">Device Description</th>
+                            <td width="2%">:</td>
+                            <td>{{data.medicalDevice.deviceDscription}}</td>
+                          </tr>
+                    </table>
+                  </div>
+            </div>
+            <div id="Prescriptions" data-tab-content>
+                <table class="table" style="max-width: 80%; margin-left:10%;">
+                    <tr id="header">
+                        <th scope="col">Test Name</th>
+                        <th scope="col">Test Specimen</th>
+                        <th scope="col">Test Body Site</th>
+                        <th scope="col">Test Use</th>
+                        <th scope="col">Test Description</th>
+                        <th scope="col">
+                            <a href="#" class="btn btn-info btm-sm">Add Test</a>
+                          
+                        </th>
+                    </tr>
+                    
+                   
+                            <tr>
+                                <td>{{data.laboratoryTest.testName}}</td>
+                                <td>{{data.laboratoryTest.testSpecimen}}</td>
+                                <td>{{data.laboratoryTest.testBodySite}}</td>
+                                <td>{{data.laboratoryTest.testUse}}</td>
+                                <td>{{data.laboratoryTest.testDescription}}</td>
+                                <td>
+                                   
+                                    {% if request.session.role == "Nurse" %}
+                                        <a href="#" class="btn btn-info btm-sm">Upload Report</a>
+                                     {% else %}   
+                                        <a href="#" class="btn btn-info btm-sm">Download Report</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+            
+                </table>
+            </div>
+            <div id="Medicines" data-tab-content>
+                <div class="container mt-2">
+                    <!--   <div class="card card-block mb-2">
+                        <h4 class="card-title">Card 1</h4>
+                        <p class="card-text">Welcom to bootstrap card styles</p>
+                        <a href="#" class="btn btn-primary">Submit</a>
+                      </div>   -->
+                      <div class="row">
+                        {% for meds in data.medsDirList %}
+                        <div class="col-md-3 col-sm-6 item">
+                          <div class="card item-card card-block">
+                            <h5 class="item-card-title text-center" style="text-align: center">{{ meds.medsName.name }}</h5>
+                            <ul class="list-group list-group-flush" style="text-align: center">
+                              <li class="list-group-item">Dose Unit: {{ meds.medsDir.doseUnit }}</li>
+                              <li class="list-group-item">Duration: {{ meds.medsDir.duration }}</li>
+                              <li class="list-group-item">Number Of Times: {{ meds.medsDir.doseTiming }}</li>
+                              <li class="list-group-item">Additional Instruction: {{ meds.medsDir.additionalInstruction }}</li>
+                              <li class="list-group-item">Reason: {{ meds.medsDir.reason }}</li>
+                              <li class="list-group-item"> <a href="#" class="btn btn-info btm-sm">View Medicine</a></li>
+            
+                            </ul>
+                      </div>
+                        </div>
+                        {% endfor %}
+                        
+                      </div>
+                      
+                    </div>
+               
+            </div>
+        </div>
+       </div>
+        
+    
+</body>
+<script>
+    const tabs = document.querySelectorAll('[data-tab-target]')
+    const tabContents = document.querySelectorAll('[data-tab-content]')
 
-	</body>
-</html>
+    tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        const target = document.querySelector(tab.dataset.tabTarget)
+        tabContents.forEach(tabContent => {
+        tabContent.classList.remove('active')
+        })
+        tabs.forEach(tab => {
+        tab.classList.remove('active')
+        })
+        tab.classList.add('active')
+        target.classList.add('active')
+})
+})
+</script>
+{% endblock %}
