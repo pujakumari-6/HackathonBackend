@@ -9,6 +9,7 @@ def auth_middleware(get_response):
             return redirect('/accounts/loginpage')
    
         response = get_response(request)
+        
         return response
     return Admin
 
