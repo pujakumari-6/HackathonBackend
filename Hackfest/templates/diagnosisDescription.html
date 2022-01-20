@@ -149,20 +149,28 @@
                 <li class="nav-item"  data-tab-target="#MedicalHistory">
                     <a class="nav-link active" href="#" style="background-color: #16a085;" >Device Details</a>
                   </li>
-                  <li class="nav-item" data-tab-target="#Prescriptions">
-                    <a class="nav-link active" href="#" style="background-color: #16a085;" >Tests</a>
-                  </li>
-                  <li class="nav-item" data-tab-target="#Medicines">
-                    <a class="nav-link active" href="#" style="background-color: #16a085;" >Medicines</a>
-                  </li>
+                  {% if data.laboratoryTest|length %}
+                    <li class="nav-item" data-tab-target="#Prescriptions">
+                      <a class="nav-link active" href="#" style="background-color: #16a085;" >Tests</a>
+                    </li>
+                  {% endif %}
+                  {% if data.medsDirList|length %}
+                    <li class="nav-item" data-tab-target="#Medicines">
+                      <a class="nav-link active" href="#" style="background-color: #16a085;" >Medicines</a>
+                    </li>
+                  {% endif %}
+                  
               </ul>
             </div>
         </div>
 
         <div class="tab-content">
             <div id="BasicDetails" data-tab-content class="active">
-                <h1>Diagnosis Details   <a href="#" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Add Medicine</a></h1>
-                
+              {% if request.session.role == "Doctor" %}
+                <h1>Diagnosis Details   <a href="/doctor/laboratoryTest/{{ data.prescriptionId }}" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Add Test</a><a href="/doctor/medication/{{ data.prescriptionId }}" class="btn btn-info btm-sm" style ="background-color:#16a085; color:white; float:right; margin-top:5px; margin-right:5px;">Add Medicine</a></h1>
+                {% else %}
+                <h1>Diagnosis Details</h1>
+              {% endif %}
                 <div class="card-body pt-0" id="table1">
                     <table class="table table-bordered" >
                         <tr>
@@ -241,27 +249,24 @@
                         <th scope="col">Test Body Site</th>
                         <th scope="col">Test Use</th>
                         <th scope="col">Test Description</th>
-                        <th scope="col">
-                            <a href="#" class="btn btn-info btm-sm">Add Test</a>
-                          
-                        </th>
                     </tr>
-                    
-                   
                             <tr>
-                                <td>{{data.laboratoryTest.testName}}</td>
-                                <td>{{data.laboratoryTest.testSpecimen}}</td>
-                                <td>{{data.laboratoryTest.testBodySite}}</td>
-                                <td>{{data.laboratoryTest.testUse}}</td>
-                                <td>{{data.laboratoryTest.testDescription}}</td>
-                                <td>
+                              {% for var in data.laboratoryTest %}
+                                <td>{{var.testName}}</td>
+                                <td>{{var.testSpecimen}}</td>
+                                <td>{{var.testBodySite}}</td>
+                                <td>{{var.testUse}}</td>
+                                <td>{{var.testDescription}}</td>
+                                <!-- <td> -->
+                              {% endfor %}
+                                
                                    
-                                    {% if request.session.role == "Nurse" %}
+                                    <!-- {% if request.session.role == "Nurse" %}
                                         <a href="#" class="btn btn-info btm-sm">Upload Report</a>
                                      {% else %}   
                                         <a href="#" class="btn btn-info btm-sm">Download Report</a>
-                                    {% endif %}
-                                </td>
+                                    {% endif %} -->
+                                <!-- </td> -->
                             </tr>
             
                 </table>

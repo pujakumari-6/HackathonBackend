@@ -108,9 +108,9 @@ def patientRecord(request, patientId):
         return HttpResponse("<h1>something went wrong!!!</h1>")
         
 # update patient record
-@nursedata_middleware
+# @nursedata_middleware
 def updatePatientRecord(request, patientId):
-    try:
+    # try:
         if request.session['role']!="Nurse":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
 
@@ -160,6 +160,6 @@ def updatePatientRecord(request, patientId):
                 
         else:
             return render(request, 'updatePatientRecord.html', {'patient':patientRecord,'profile':patientP})
-    except Exception as e:
-        print(e)
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+    # except Exception as e:
+    #     print(e)
+    #     return HttpResponse("<h1>something went wrong!!!</h1>")
