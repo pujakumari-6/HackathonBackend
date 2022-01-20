@@ -1,0 +1,237 @@
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Patient Profile</title>
+
+    <meta name="author" content="Codeconvey" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet"><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+
+    <!--Only for demo purpose - no need to add.-->
+    
+    <script>   
+        function myFunction2(){
+          var x = document.getElementById("table2");
+          if (x.style.display==="none"){
+            x.style.display = "block";
+          }
+          else{
+            x.style.display="none";
+          }
+        }
+        function myFunction3(){
+          var x = document.getElementById("table3");
+          if (x.style.display==="none"){
+            x.style.display = "block";
+          }
+          else{
+            x.style.display="none";
+          }
+
+        }
+        
+
+
+    </script>
+	    
+</head>
+<body style="background-color:#6b6e6e ;">
+		
+
+
+
+<section>
+  <br>
+    <div class="rt-container">
+          <div class="col-rt-12">
+              <div class="Scriptcontent">
+              
+                <!-- Student Profile -->
+                <div class="student-profile py-4">
+                  <div class="container">
+                    <div class="row">
+                      
+                      <div class="col-lg-12">
+                        <div class="card shadow-sm">
+                          <div class="card-header bg-transparent border-0">
+                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i> Details </h3>
+                          </div>
+                          <div class="card-body pt-0" id="table1">
+                            <table class="table table-bordered" >
+                              <tr>
+                                <th width="30%">Patient Name</th>
+                                <td width="2%">:</td>
+                                <td>{{details.name}}</td>
+                              </tr>
+                              <tr>
+                                <th width="30%">Date of birth	</th>
+                                <td width="2%">:</td>
+                                <td>{{details.dateOfBirth}}</td>
+                              </tr>
+                              
+                              <tr>
+                                <th width="30%">Gender</th>
+                                <td width="2%">:</td>
+                                <td>{{details.gender}}</td>
+                              </tr>
+            
+                              <tr>
+                                <th width="30%">Blood Group</th>
+                                <td width="2%">:</td>
+                                <td>{{details.bloodGroup}}</td>
+                              </tr>
+                              <tr>
+                                <th width="30%">Mobile Number </th>
+                                <td width="2%">:</td>
+                                <td>{{details.mobile}}</td>
+                              </tr>
+                              <tr>
+                                <th width="30%">Email</th>
+                                <td width="2%">:</td>
+                                <td>{{details.email}}</td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                          <div style="height: 26px"></div>
+                          <div class="card shadow-sm">
+                            <div class="card-header bg-transparent border-0">
+                              <h3 class="mb-0"><button onclick="myFunction2()"><i class="far fa-clone pr-1"></i></button>Patient medical history </h3>
+                            </div>
+                            <div class="card-body pt-0" id="table2">
+                              <table class="table table-bordered">
+                                <tr>
+                                    <th width="30%">Height</th>
+                                    <td width="2%">:</td>
+                                    <td>{{history.height}}</td>
+                                </tr>
+                                <tr>
+                                    <th width="30%">Weight</th>
+                                    <td width="2%">:</td>
+                                    <td>{{history.weight}}</td>
+                                  </tr>
+                                <tr>  
+                                  <th width="30%">Blood Pressure</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.bloodPressure}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Pulse Rate</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.pulseRate}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Body Temprature</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.bodyTemprature}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Alcolohic</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.isAlcolohic}}</td>
+                                </tr>
+                                <tr>  
+                                  <th width="30%">Smoker</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.isSmoker}}</td>
+                                </tr>
+                                {% if details.gender == "Female" %}
+                                  <tr id="Pregnancy">
+                                    <th width="30%">Pregnancy Status</th>
+                                    <td width="2%">:</td>
+                                    <td>{{history.pregnancyStatus}}</td>
+                                  </tr>
+                                  {% if history.pregnancyStatus == "Yes" %}
+                                    <tr id="Pregnancy">
+                                      <th width="30%">Estimated Delivery</th>
+                                      <td width="2%">:</td>
+                                      <td>{{history.estimatedDelivery}}</td>
+                                    </tr>
+                                  {% endif %}
+                                {% endif %}
+                                <tr>
+                                  <th width="30%">Previous Surgeries</th>
+                                  <td width="2%">:</td>
+                                  <td>{{ history.previousSurgery }}</td>
+                                </tr>
+                                <tr>
+                                  <th width="30%">Is_Diabetic</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.isDiabetic}}</td>
+                                </tr>
+                                <tr>
+                                  <th width="30%">Insurance Plan Name</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.insurancePlanName}}</td>
+                                </tr>
+                                <tr>
+                                    <th width="30%">Insurance Plan Number</th>
+                                    <td width="2%">:</td>
+                                    <td>{{history.insurancePlanNumber}}</td> 
+                                  </tr>
+                                <tr>
+                                  <th width="30%">Status</th>
+                                  <td width="2%">:</td>
+                                  <td>{{history.status}}</td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                          <div style="height: 26px"></div>
+                          <div class="card shadow-sm">
+                            <div class="card-header bg-transparent border-0">
+                              <h3 class="mb-0"><button onclick="myFunction3()"><i class="far fa-clone pr-1"></i></button>Patient Prescriptions </h3>
+                              {% if request.session.role == "Doctor" %}
+                                <h5 style="text-align: right;"><a href="/doctor/diagnosis/{{details.id}}" class="btn btn-info btm-sm">Add Prescription</a></h5>
+                              {% endif %}
+                            </div>
+                            <div class="card-body pt-0" id="table3">
+                              {% if prescriptionList %}
+                              <table class="table table-light table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Diagnosis Date</th>
+                                    <th scope="col">Diagnosis Name</th>
+                                    <th scope="col"></th>
+                                  </tr>
+                                </thead>
+                                {% if prescriptionList %}
+                                        {% for data in prescriptionList %}
+                                        <tr>
+                                          <td>{{data.diagnosisCreatedDate}}</td>
+                                          <td>{{data.diagnosisName}}</td>
+                                            <td>
+                                                <a href="/doctor/viewPrescription/{{data.prescriptionId}}" class="btn btn-info btm-sm">View Diagnosis</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                            </table>
+                              {% endif %}
+                              
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- partial -->
+           
+    		</div>
+		</div>
+    </div>
+</section>
+     
+
+
+    <!-- Analytics -->
+
+	</body>
+</html>
+{
