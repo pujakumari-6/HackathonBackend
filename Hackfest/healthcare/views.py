@@ -52,10 +52,10 @@ def newPatient(request):
             finally:
                 return render(request, 'newPatient.html',{'success':True, 'patientId':patientData.id})
         else:
-                return render(request, 'newPatient.html')
+            return render(request, 'newPatient.html')
     except Exception as e:
         print(e)
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+        return render(request, 'newPatient.html',{'message':'Something went wrong'})
 
 # Create new patient record
 @nurse_middleware
