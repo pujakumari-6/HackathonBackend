@@ -9,6 +9,67 @@ from django.contrib.auth import authenticate
 from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
 
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
+def medicineFile(request, prescriptionId):
+   
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize= letter, bottomup= 0)
+    textob= c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica", 16)
+    p=("Patient Name-")
+    textob.textLine(p)
+    prescription = Prescription.objects.get(pk=prescriptionId)
+    patient = Patient.objects.get(pk=prescription.patientId.id)
+    diagnosis = Diagnosis.objects.get(pk=prescription.diagnosisId.id)
+    medicinDirMap = MedicineDirPrescriptionMap.objects.filter(prescriptionId=prescription)
+    textob.textLine(patient.name)
+    q=("Diagnosis Name-")
+    textob.textLine(q)
+    textob.textLine(diagnosis.diagnosisName)
+    r=("----------------------------------------------------------")
+    textob.textLine(r)
+    t=("[MEDICINES]")
+    textob.textLine(t)
+    if len(medicinDirMap) != 0:
+            print('in if')
+            medsDirList = []
+            for entry in medicinDirMap:
+                medsDir = MedicineDirection.objects.filter(pk=entry.medicineDirectionId.id).first()
+                medsName = Medicine.objects.filter(pk=medsDir.medicineId.id).first()
+                medsDirList.append({
+                    'medsDir':medsDir,
+                    'medsName':medsName
+                })
+            lines = []
+            for meds in medsDirList:
+                lines.append("Name-")
+                lines.append(meds['medsName'].name)
+                lines.append("Dose Unit-")
+                lines.append(meds['medsDir'].doseUnit)
+                lines.append("Duration-")
+                lines.append(meds['medsDir'].duration)
+                lines.append("Number Of Times-")
+                lines.append(meds['medsDir'].doseTiming)
+                lines.append("Instruction-")
+                lines.append(meds['medsDir'].additionalInstruction)
+                lines.append("Reason-")
+                lines.append(meds['medsDir'].reason)
+                lines.append("----------------------------------------------------------")
+            
+            for line in lines:
+                textob.textLine(line)
+    c.drawText(textob) 
+    c.showPage() 
+    c.save()  
+    buf.seek(0)
+    return FileResponse(buf, as_attachment=True, filename='medicine.pdf')
+
 def searchPatient(request):
     try:
         print(request.session['role'])

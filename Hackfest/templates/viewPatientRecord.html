@@ -207,8 +207,9 @@
                                           <td>{{data.diagnosisName}}</td>
                                             <td>
                                                 <a href="/doctor/viewPrescription/{{data.prescriptionId}}" class="btn btn-info btm-sm">View Diagnosis</a>
+                                                <a href="/doctor/medicineFile/{{data.prescriptionId}}" class="btn btn-info btm-sm">Download Prescriptions</a>
                                             </td>
-                                        </tr>
+                                         </tr>
                                         {% endfor %}
                                     {% endif %}
                             </table>
