@@ -8,8 +8,7 @@ from .models import *
 from django.contrib.auth import authenticate
 from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
-
-from accounts.middleware import  doctor_middleware , both_middleware
+from accounts.middleware import  doctor_middleware , both_middleware,doctordata_middleware, bothdata_middleware
 from django.db import transaction
 
 from django.http import FileResponse
@@ -101,7 +100,7 @@ def doctorHome(request):
         return render(request, "index.html", {'message':'Something Went wrong'})
 
 # Patient List
-# @both_middleware
+@both_middleware
 def patientList(request):
     try:
         #print(request.session['role'])
@@ -186,7 +185,7 @@ def viewPrescription(request, prescriptionId):
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")   
 
-@doctor_middleware
+@doctordata_middleware
 def laboratoryTest(request,prescriptionId):
     try:
         testName = request.POST.get('testName',None)
@@ -204,7 +203,7 @@ def laboratoryTest(request,prescriptionId):
         message='Something Went Wrong!'
         return redirect('laboratoryTest',prescriptionId,message)
 
-# @doctor_middleware      
+@doctordata_middleware      
 def diagnosis(request, patientId):
     try:
         if request.session['role']!= "Doctor":
@@ -242,7 +241,8 @@ def diagnosis(request, patientId):
         print(e)
         return render(request, "diagnosisPage.html",{'patient':patient, 'message':'Something Went Wrong!'})
 
-# @doctor_middleware
+
+@doctordata_middleware
 def medication(request, prescriptionId):
     try:
         if request.session['role']!= "Doctor":

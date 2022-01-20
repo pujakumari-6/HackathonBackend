@@ -9,7 +9,7 @@ import uuid
 from django.conf import settings
 # Create your views here.
 
-from accounts.middleware import nurse_middleware
+from accounts.middleware import nurse_middleware,nursedata_middleware
 
 
 @nurse_middleware
@@ -55,7 +55,8 @@ def newPatient(request):
         return render(request, 'newPatient.html',{'message':'Something went wrong'})
 
 # Create new patient record
-# @nurse_middleware
+
+@nursedata_middleware
 def patientRecord(request, patientId):
     try:
         patient = Patient.objects.filter(id=patientId).first()
@@ -107,7 +108,7 @@ def patientRecord(request, patientId):
         return HttpResponse("<h1>something went wrong!!!</h1>")
         
 # update patient record
-@nurse_middleware
+@nursedata_middleware
 def updatePatientRecord(request, patientId):
     try:
         if request.session['role']!="Nurse":

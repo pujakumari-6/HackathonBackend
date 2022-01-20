@@ -12,6 +12,20 @@ def auth_middleware(get_response):
         return response
     return Admin
 
+
+def check_middleware(get_response):
+    def Admin(request,roledata):
+        if request.session.get("role") != "Admin":  
+
+            return redirect('/accounts/loginpage')
+   
+        response = get_response(request, roledata)
+        return response
+    return Admin
+    
+
+
+
 def doctor_middleware(get_response):
     def doctor(request):
         if request.session.get("role") != "Doctor":  
@@ -21,6 +35,28 @@ def doctor_middleware(get_response):
         return response
     return doctor
 
+
+def doctordata_middleware(get_response):
+    def doctor(request, patientId):
+        if request.session.get("role") != "Doctor":  
+            return redirect('/accounts/loginpage')
+   
+        response = get_response(request, patientId)
+        return response
+    return doctor
+
+def doctordata1_middleware(get_response):
+    def doctor(request, patientId):
+        if request.session.get("role") != "Doctor":  
+            return redirect('/accounts/loginpage')
+   
+        response = get_response(request, patientId)
+        return response
+    return doctor
+
+
+
+
 def both_middleware(get_response):
     def both(request):
         if request.session.get("role") !=  "Doctor" and request.session.get("role") !="Nurse":
@@ -28,6 +64,18 @@ def both_middleware(get_response):
         response = get_response(request)
         return response
     return both
+
+def bothdata_middleware(get_response):
+    def both(request, roledata):
+        if request.session.get("role") !=  "Doctor" and request.session.get("role") !="Nurse":
+            return redirect('/accounts/loginpage')
+        response = get_response(request, roledata)
+        return response
+    return both
+
+
+
+
 
 def nurse_middleware(get_response):
     def nurse(request):
@@ -37,16 +85,12 @@ def nurse_middleware(get_response):
         return response
     return nurse
 
-def auth_param_middleware(get_response):
-    def Admin(request,roledata):
-        if request.session.get("role") != "Admin":  
-
+ 
+def nursedata_middleware(get_response):
+    def nurse(request, patientId):
+        if request.session.get("role") !="Nurse":
             return redirect('/accounts/loginpage')
-   
-        response = get_response(request,roledata)
+        response = get_response(request, patientId)
         return response
-    return Admin
-
-
-
+    return nurse
  

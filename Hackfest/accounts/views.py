@@ -7,7 +7,8 @@ from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
 from django.contrib import messages 
-from .middleware import auth_middleware, auth_param_middleware
+
+from .middleware import auth_middleware, check_middleware
 
 
 @auth_middleware
@@ -22,7 +23,7 @@ def choiseview(request):
         return render(request, 'index.html', {'messages': "something went wrong!!"})
 
 
-@auth_param_middleware
+@check_middleware
 def doctor_register(request, roledata):
     try:
         if request.method =='POST':
