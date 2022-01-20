@@ -26,7 +26,7 @@ def registrationNoSubmit(request):
         registrationNumber = request.POST['registerId']
         patient = Patient.objects.filter(registrationNumber=registrationNumber).first()
         patientId=patient.id
-        return redirect('diagnosis',patientId)
+        return redirect('patientDiagnosis',patientId)
     except Exception as e:
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")        

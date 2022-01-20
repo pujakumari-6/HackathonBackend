@@ -265,12 +265,9 @@ footer a {
 </head>
 <body>
 	<div class="col-md-12 ">
-	{% if messages  %}
-		<div class="alert alert-danger " style="text-align: center" role="alert">
-			{{messages}}
-</div>
-</div>
-{% endif %}
+
+		
+	
 
 
   <div class="container" id="container">
@@ -278,12 +275,9 @@ footer a {
 
       <form action="loginpage" method="post">
         {% csrf_token %}
-		
-		
-
         <h1>Sign in</h1>
        
-        <input type='text' placeholder="username" name='uname'>
+        <input type='text' placeholder="Email" name='eml'>
         <input type="password" placeholder="Password" name='pwd'  />
         <!-- <a href="forgot">Forgot your password?</a> -->
         <button>Sign In</button>

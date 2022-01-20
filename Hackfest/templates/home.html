@@ -3,7 +3,8 @@
 
 {% block content %} 
      <head>
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
           <style>
                 .zoomOut{
                   transition: transform .2s; /* Animation */
@@ -21,15 +22,15 @@
                .circle-shape {
                     flex-shrink: 0;
                     padding: 0;
-                    width: 60px;
-                    height: 60px;
+                    width: 85px;
+                    height: 85px;
                     line-height: 64px;
                     border-radius: 50%;
                     text-align: center;
                     font-size: 32px;
                 }
                 .bg-accent {
-                    background-color: #FF3D85 !important;
+                    background-color: #16a085 !important;
                 }
                #one{
                     margin-top: -3rem !important;
@@ -121,12 +122,26 @@
                 
           </style>
      </head>
+    
    <div class="page-hero bg-image overlay-dark" style="background-image: linear-gradient(rgba(0, 0, 0.5, 0.527),rgba(0, 0, 0.5, 0.5)), url(../static/bg_image_1.jpg);">
      <div class="hero-section">
        <div class="container text-center wow zoomIn">
          <span class="subhead" style="font-size:50px;">Let's make your life happier</span>
          <h1 class="display-4" style="font-size: 100px;">Healthy Living</h1>
-         <a href="#" class="btn btn-primary btn-lg zoomOut" id="button1">View Prescriptions </a>
+         {% if request.session.role %}
+            {% if request.session.role == 'Admin' %}
+              <a href="/accounts/createdoctor/" class="btn btn-primary btn-lg zoomOut" id="button1">Create Doctor </a>
+              <a href="/accounts/createnurse/" class="btn btn-primary btn-lg zoomOut" id="button1">Create Nurse </a>
+              {% elif request.session.role == 'Doctor' %}
+                <a href="/doctor/patient-list/" class="btn btn-primary btn-lg zoomOut" id="button1">View Patients </a>
+              {% else %}
+                <a href="/doctor/patient-list/" class="btn btn-primary btn-lg zoomOut" id="button1">View Patient </a>
+                <a href="/healthcare/newPatient" class="btn btn-primary btn-lg zoomOut" id="button1">Register Patient</a>
+            {% endif %}
+           {% else %}
+           <a href="/registrationNo" class="btn btn-primary btn-lg zoomOut" id="button1">View Prescriptions </a>
+         {% endif %}
+         
        </div>
      </div>
    </div>
@@ -136,26 +151,30 @@
          <div class="row justify-content-center">
            <div class="col-md-4 py-3 py-md-0">
              <div class="card-service wow fadeInUp zoomOut">
-               <div class="circle-shape bg-secondary text-white " >
-                    
+               <div class="circle-shape bg-secondary text-white " style="padding-top: 10px;" >
+                <i class='fas fa-comment fa-2x'></i>
                </div>
+               
                <p><span>Chat</span> with a doctors</p>
+              
+           
+        
              </div>
            </div>
            <div class="col-md-4 py-3 py-md-0">
              <div class="card-service wow fadeInUp zoomOut">
                <div class="circle-shape bg-primary text-white ">
-                 <span class="mai-shield-checkmark"></span>
+                <i class='fas fa-shield-alt fa-2x' style="padding-top: 10px;"></i>
                </div>
-               <p><span>One</span>-Health Protection</p>
+               <p><span>Inno</span>-Health Protection</p>
              </div>
            </div>
            <div class="col-md-4 py-3 py-md-0">
              <div class="card-service wow fadeInUp zoomOut">
                <div class="circle-shape bg-accent text-white">
-                 <span class="mai-basket"></span>
+                <i class='fas fa-medkit fa-2x' style="padding-top: 10px;"></i>
                </div>
-               <p><span>One</span>-Health Pharmacy</p>
+               <p><span>Inno</span>-Health Pharmacy</p>
              </div>
            </div>
          </div>

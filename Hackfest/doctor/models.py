@@ -1,12 +1,10 @@
 import datetime
 from django.contrib.auth.models import User
 from django.db import models
-
-
 from healthcare.models import Patient
 from django.contrib.auth.models import User
-# Create your models here.
 
+# Create your models here.
 class Medicine(models.Model):
     name = models.CharField(max_length=200)
     form = models.CharField(max_length=100)
@@ -39,12 +37,11 @@ class LaboratoryTest(models.Model):
     testBodySite = models.CharField(max_length=200)
     testUse = models.CharField(max_length=100)
     testDescription = models.CharField(max_length=100)
+    testReport = models.CharField(max_length=1000)
 class Prescription(models.Model):
     patientId = models.ForeignKey(Patient, on_delete=models.CASCADE)
     diagnosisId = models.ForeignKey(Diagnosis, on_delete=models.CASCADE)
     medicalDevice = models.ForeignKey(MedicalDevice, on_delete=models.CASCADE)
-    laboratoryTestId = models.ForeignKey(LaboratoryTest, on_delete=models.CASCADE)
-
 class MedicineDirection(models.Model):
     medicineId = models.ForeignKey(Medicine, on_delete=models.CASCADE)
     doseUnit = models.CharField(max_length=100)
@@ -52,12 +49,11 @@ class MedicineDirection(models.Model):
     doseTiming = models.CharField(max_length=100)
     additionalInstruction = models.TextField()
     reason = models.TextField()
-
 class MedicineDirPrescriptionMap(models.Model):
     prescriptionId = models.ForeignKey(Prescription, on_delete=models.CASCADE)
     medicineDirectionId = models.ForeignKey(MedicineDirection, on_delete=models.CASCADE)
-
-   
-
+class LabTestPrescriptionMap(models.Model):
+    laboratoryTestId = models.ForeignKey(LaboratoryTest, on_delete=models.CASCADE)
+    prescriptionId = models.ForeignKey(Prescription, on_delete=models.CASCADE)
 
    

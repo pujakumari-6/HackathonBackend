@@ -2,12 +2,15 @@ from django.core.checks import messages
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, response
 from django.contrib.auth.models import User
-import uuid
+from django.core.paginator import Paginator
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate
 from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
+
+from accounts.middleware import  doctor_middleware , both_middleware
+from django.db import transaction
 
 from django.http import FileResponse
 import io
@@ -70,6 +73,9 @@ def medicineFile(request, prescriptionId):
     buf.seek(0)
     return FileResponse(buf, as_attachment=True, filename='medicine.pdf')
 
+
+
+@both_middleware
 def searchPatient(request):
     try:
         print(request.session['role'])
@@ -83,7 +89,8 @@ def searchPatient(request):
     except Exception as e:
         print(e)
         return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
-    
+
+@both_middleware
 def doctorHome(request):
     try:
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
@@ -94,13 +101,16 @@ def doctorHome(request):
         return render(request, "index.html", {'message':'Something Went wrong'})
 
 # Patient List
+# @both_middleware
 def patientList(request):
     try:
         #print(request.session['role'])
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
-        data = Patient.objects.all()
+        data_pagin = Patient.objects.all().order_by('-createdDate')
+        paginator = Paginator(data_pagin, 2)
+        page_number = request.GET.get('page')
+        data = paginator.get_page(page_number)
         return render(request, "patientlist.html", {'data':data})     
     except Exception as e:
         print(e)
@@ -110,22 +120,34 @@ def patientList(request):
 def patientRecord(request, patientId):
     try:
         patientDetails = Patient.objects.get(pk=patientId)
-        print(patientDetails.name)
-        history = PatientRecord.objects.get(patientId=patientId)
-        allPrescription = Prescription.objects.filter(patientId=patientDetails)
-        prescriptionListData = []
-        for prep in allPrescription:
-            diagnosis = Diagnosis.objects.get(pk=prep.diagnosisId.id)
-            prescriptionListData.append({
-                'diagnosisCreatedDate': diagnosis.createdDate,
-                'diagnosisName': diagnosis.diagnosisName,
-                'prescriptionId':prep.id
-            })
-        return render(request, "viewPatientRecord.html", {'history':history, 'details':patientDetails,'prescriptionList':prescriptionListData}) 
+        his = PatientRecord.objects.filter(patientId=patientDetails)
+        if(len(his)!=0):
+            history=his.first()
+            allPrescription = Prescription.objects.filter(patientId=patientDetails)
+            prescriptionListData = []
+            for prep in allPrescription:
+                diagnosis = Diagnosis.objects.get(pk=prep.diagnosisId.id)
+                prescriptionListData.append({
+                    'diagnosisCreatedDate': diagnosis.createdDate,
+                    'diagnosisName': diagnosis.diagnosisName,
+                    'prescriptionId':prep.id
+                })
+            return render(request, "viewPatientRecord.html", {'history':history, 'details':patientDetails,'prescriptionList':prescriptionListData}) 
+        else:
+            return render(request, "viewPatientRecord.html", {'noRecord':True, 'details':patientDetails})
     except Exception as e:
         print(e)
-        return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
+        # return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
+        redirect('/')
+
 # See Prescription
+def viewMedicine(request,mdicineId,patientId):
+    try:
+        medicineDetails = Patient.objects.get(pk=patientId)
+        return render(request,'viewMedicine.html',{'medicineDetails': medicineDetails})
+    except Exception as e:
+        print(e)
+        return redirect('patientDiagnosis',patientId)
 
 def viewPrescription(request, prescriptionId):
     try:
@@ -133,11 +155,16 @@ def viewPrescription(request, prescriptionId):
         patient = Patient.objects.get(pk=prescription.patientId.id)
         diagnosis = Diagnosis.objects.get(pk=prescription.diagnosisId.id)
         medicalDevice = MedicalDevice.objects.get(pk=prescription.medicalDevice.id)
-        laboratoryTest = LaboratoryTest.objects.get(pk=prescription.laboratoryTestId.id)
+        laboratoryTest = LabTestPrescriptionMap.objects.filter(prescriptionId=prescription)
+        tests=[]
+        if(len(laboratoryTest)>0):
+            if len(laboratoryTest):
+                for lab in laboratoryTest:
+                    test = LaboratoryTest.get(pk=lab.laboratoryTestId.id)
+                    tests.append(test)
         medicinDirMap = MedicineDirPrescriptionMap.objects.filter(prescriptionId=prescription)
+        medsDirList = []
         if len(medicinDirMap) != 0:
-            print('in if')
-            medsDirList = []
             for entry in medicinDirMap:
                 medsDir = MedicineDirection.objects.filter(pk=entry.medicineDirectionId.id).first()
                 medsName = Medicine.objects.filter(pk=medsDir.medicineId.id).first()
@@ -146,30 +173,42 @@ def viewPrescription(request, prescriptionId):
                     'medsName':medsName
                 })
                 print(medsDirList)
-            data = {
+        data = {
             'patient':patient,
             'diagnosis':diagnosis,
             'medicalDevice':medicalDevice,
-            'laboratoryTest':laboratoryTest,
+            'laboratoryTest':tests,
             'medsDirList':medsDirList
-            }
-            return render(request, "diagnosisDescription.html",{'data':data})
-        else:
-            data = {
-                'patient':patient,
-                'diagnosis':diagnosis,
-                'medicalDevice':medicalDevice,
-                'laboratoryTest':laboratoryTest,
-            }
-            return render(request, "diagnosisDescription.html",{'data':data})
+        }
+        return render(request, "diagnosisDescription.html",{'data':data})
+       
     except Exception as e:
         print(e)
         return HttpResponse("<h1>something went wrong!!!</h1>")   
+
+@doctor_middleware
+def laboratoryTest(request,prescriptionId):
+    try:
+        testName = request.POST.get('testName',None)
+        testBodySite = request.POST.get('testBodySite',None)
+        testUse = request.POST.get('testUse',None)
+        testDescription =  request.POST.get('testDescription',None)
+        testSpecimen =  request.POST.get('testSpecimen',None)
+        with transaction.atomic():
+            laboratoryTestData = LaboratoryTest.objects.create(testName=testName,testBodySite=testBodySite,testUse=testUse,testDescription=testDescription, testSpecimen=testSpecimen)
+            prescription = Prescription.objects.get(pk=prescriptionId)
+            labTestData = LabTestPrescriptionMap.objects.create(laboratoryTestId=laboratoryTestData, prescriptionId=prescription)
+            message='Test Added Successfully!'
+        return redirect('laboratoryTest',prescriptionId,message)
+    except:
+        message='Something Went Wrong!'
+        return redirect('laboratoryTest',prescriptionId,message)
+
+# @doctor_middleware      
 def diagnosis(request, patientId):
     try:
         if request.session['role']!= "Doctor":
             return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
-
         patient = Patient.objects.filter(id=patientId).first()
         if request.method == 'POST':
             diagnosisName = request.POST.get('diagnosisName',None)
@@ -189,24 +228,21 @@ def diagnosis(request, patientId):
             deviceBodySite = request.POST.get('deviceBodySite',None)
             deviceUse = request.POST.get('deviceUse',None)
             deviceDescription = request.POST.get('deviceDescription',None)
-            testName = request.POST.get('testName',None)
-            testBodySite = request.POST.get('testBodySite',None)
-            testUse = request.POST.get('testUse',None)
-            testDescription =  request.POST.get('testDescription',None)
-            testSpecimen =  request.POST.get('testSpecimen',None)
-            diagnosisData = Diagnosis.objects.create(diagnosisName=diagnosisName,diagnosisBodySite=diagnosisBodySite,dateOfOnset=dateOfOnset,severity=severity,dateOfAbatement=dateOfAbatement,diagnosisCertainity=diagnosisCertainity,diagnosisDescription=diagnosisDescription)
-            deviceData = MedicalDevice.objects.create(deviceName=deviceName,deviceBodySite=deviceBodySite,deviceUse=deviceUse,deviceDscription=deviceDescription)
-            laboratoryTestData = LaboratoryTest.objects.create(testName=testName,testBodySite=testBodySite,testUse=testUse,testDescription=testDescription, testSpecimen=testSpecimen)
-            prescriptionData = Prescription.objects.create(patientId=patient,diagnosisId=diagnosisData,medicalDevice=deviceData,laboratoryTestId=laboratoryTestData)
-            allMeds = Medicine.objects.all()
-            return render(request, "medicationPage.html",{'prescriptionId':prescriptionData.id,'allMeds':allMeds})
-
+            
+            with transaction.atomic():
+                diagnosisData = Diagnosis.objects.create(diagnosisName=diagnosisName,diagnosisBodySite=diagnosisBodySite,dateOfOnset=dateOfOnset,severity=severity,dateOfAbatement=dateOfAbatement,diagnosisCertainity=diagnosisCertainity,diagnosisDescription=diagnosisDescription)
+                deviceData = MedicalDevice.objects.create(deviceName=deviceName,deviceBodySite=deviceBodySite,deviceUse=deviceUse,deviceDscription=deviceDescription)
+                prescriptionData = Prescription.objects.create(patientId=patient,diagnosisId=diagnosisData,medicalDevice=deviceData)
+                allMeds = Medicine.objects.all()
+                prescriptionId=prescriptionData.id
+            redirect('viewPrescription',prescriptionId)
         else:
             return render(request, "diagnosisPage.html",{'patient':patient})
     except Exception as e:
         print(e)
-        return HttpResponse("<h1>something went wrong!!!</h1>")
+        return render(request, "diagnosisPage.html",{'patient':patient, 'message':'Something Went Wrong!'})
 
+# @doctor_middleware
 def medication(request, prescriptionId):
     try:
         if request.session['role']!= "Doctor":
@@ -221,9 +257,10 @@ def medication(request, prescriptionId):
             doseTiming = request.POST['doseTiming']
             additionalInstruction = request.POST['additionalInstruction']
             reason = request.POST['reason']
-            medicationData = MedicineDirection.objects.create(medicineId=medicine,doseUnit=doseUnit,duration=duration,doseTiming=doseTiming,additionalInstruction=additionalInstruction,reason=reason)
-            prescription = Prescription.objects.get(pk=prescriptionId)
-            medicationDirData = MedicineDirPrescriptionMap.objects.create(prescriptionId=prescription,medicineDirectionId=medicationData)
+            with transaction.atomic():
+                medicationData = MedicineDirection.objects.create(medicineId=medicine,doseUnit=doseUnit,duration=duration,doseTiming=doseTiming,additionalInstruction=additionalInstruction,reason=reason)
+                prescription = Prescription.objects.get(pk=prescriptionId)
+                medicationDirData = MedicineDirPrescriptionMap.objects.create(prescriptionId=prescription,medicineDirectionId=medicationData)
             return render(request, "medicationPage.html",{'prescriptionId':prescriptionId, 'allMeds':allMeds, 'success':"Medicine Added Successfullty"})
         else:
             return render(request, "medicationPage.html",{'prescriptionId':prescriptionId})
@@ -231,3 +268,4 @@ def medication(request, prescriptionId):
         print(e)
         allMeds = Medicine.objects.all()
         return render(request, "medicationPage.html",{'prescriptionId':prescriptionId,'allMeds':allMeds,'message':"Please Fill All The Required Details!"})
+
