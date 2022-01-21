@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     
+    <style>
+        .zoomOut{
+            transition: transform .2s; /* Animation */
+          }
+          .zoomOut:hover{
+            transform: scale(1.2);
+          }
+         
+
+    </style>
+</head>
+<body>
+    <div id="medicineDetails">
+        
+        <div id="table">
+            <h1 style="padding-left: 10px;">
+                <hr style="color: #16a085;">
+                {{medicineDetails.name}}
+                
+                    <a href="#"  style="float: right; margin-right:15px; "><i class="fas fa-caret-square-left fa-lg zoomOut" style="color: #16a085; ;"></i></a>
+
+               
+            </h1>
+            <div class="card-body pt-0" id="table1">
+                <table class="table table-bordered" >
+                  <tr>
+                    <th width="30%">form</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.form}}</td>
+                  </tr>
+                  
+                  <tr>
+                    <th width="30%">category</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.category}}</td>
+                  </tr>
+
+                  <tr>
+                    <th width="30%">Strength</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.strength}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">concentration</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.concentration}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Unit Of Prepartion</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.unitOfPreparation}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Manufacturer</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.manufacturer}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Expiry Date</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.expiryDate}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Amount</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.amount}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Role</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.role}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Description</th>
+                    <td width="2%">:</td>
+                    <td>{{medicineDetails.description}}</td>
+                  </tr>
+
+                </table>
+              </div>
+
+
+        </div>
+
+
+    </div>
+
+    
+</body>
+
+
+{% endblock %}

@@ -145,15 +145,13 @@ def patientRecord(request, patientId):
         return redirect('/')
 
 # See Prescription
-def viewMedicine(request,mdicineId,patientId):
+def viewMedicine(request,medicineId,prescriptionId):
     try:
-        medicineDetails = Patient.objects.get(pk=patientId)
-        return render(request,'viewMedicine.html',{'medicineDetails': medicineDetails})
+        medicineDetails = Medicine.objects.get(pk=medicineId)
+        return render(request,'viewMedicine.html',{'medicineDetails': medicineDetails,'prescriptionId':prescriptionId})
     except Exception as e:
         print(e)
-        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
-
-        return redirect('patientDiagnosis',patientId)
+        return redirect('viewPrescription',prescriptionId)
 
 def viewPrescription(request, prescriptionId):
     try:
