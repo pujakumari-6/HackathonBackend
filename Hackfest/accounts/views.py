@@ -33,7 +33,7 @@ def doctor_register(request, roledata):
 
             if User.objects.filter(username=email).exists():
                 messages.add_message(request, messages.ERROR, "User Already Exists")
-                return redirect('/accounts/choise/')
+                return redirect('')
             else:
                 user_obj=User.objects.create(username=email,password=pwd,email=email)
                 user_obj.set_password(pwd)
@@ -54,34 +54,37 @@ def doctor_register(request, roledata):
                     messages.add_message(request, messages.SUCCESS, "Nurse is created")
 
                     return redirect('')
-
-        return render(request, 'ragister.html', {'messages': 'Please Add Valid Details !'})    
+        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+        return render(request, 'ragister.html')    
     except Exception as e:
-        print("admin")
         print(e)
-        return render(request, 'index.html', {'messages': "Something Went Wrong!!"})
+        messages.add_message(request, messages.ERROR, "Something Went Wrong!")
+        return render(request, 'index.html')
 
 @auth_middleware
 def addNurse(request):
     try:
         if request.session['role']!= "Admin":
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
+            messages.add_message(request, messages.ERROR, "You Are Not Authenticated")
+            return render(request, 'index.html')
         data={'roledata': 'Nurse' , 'message': "Register Nurse"}
         return  render(request, 'ragister.html', context= data )
     except:
-        print("nurse1")
-        return render(request, 'index.html', {'messages': "something went wrong!!"})
+        messages.add_message(request, messages.ERROR, "Something Went Wrong!")  
+        return render(request, 'index.html')
 
 @auth_middleware
 def addDoctor(request):
     try:
         if request.session['role']!= "Admin":
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
+            messages.add_message(request, messages.ERROR, "You Are Not Authenticated")            
+            return render(request, 'index.html')
         data={'roledata': 'Doctor' , 'message': "Register Doctor"}
         return  render(request, 'ragister.html', context= data )
     except:
         print("nurse2")
-        return render(request, 'index.html', {'messages': "something went wrong!!"})
+        messages.add_message(request, messages.ERROR, "something went wrong!!")
+        return render(request, 'index.html')
 
 
 def docter_login(request):
