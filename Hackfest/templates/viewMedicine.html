@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% block title %} <title>Medicine Details</title>{% endblock %}
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -23,7 +24,7 @@
                 <hr style="color: #16a085;">
                 {{medicineDetails.name}}
                 
-                    <a href="#"  style="float: right; margin-right:15px; "><i class="fas fa-caret-square-left fa-lg zoomOut" style="color: #16a085; ;"></i></a>
+                    <a href="/doctor/viewPrescription/{{ prescriptionId }}" style="float: right; margin-right:15px; "><i class="fas fa-caret-square-left fa-lg zoomOut" style="color: #16a085; ;"></i></a>
 
                
             </h1>

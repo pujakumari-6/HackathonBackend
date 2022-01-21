@@ -72,8 +72,6 @@ def medicineFile(request, prescriptionId):
     buf.seek(0)
     return FileResponse(buf, as_attachment=True, filename='medicine.pdf')
 
-
-
 @both_middleware
 def searchPatient(request):
     try:
@@ -206,12 +204,12 @@ def laboratoryTest(request,prescriptionId):
                 prescription = Prescription.objects.get(pk=prescriptionId)
                 labTestData = LabTestPrescriptionMap.objects.create(laboratoryTestId=laboratoryTestData, prescriptionId=prescription)
             # message='Test Added Successfully!'
-            return redirect('laboratoryTest',prescriptionId)
+            return render(request, 'labTest.html',{'prescriptionId':prescriptionId, 'success':"Test Added Successfully!"})
         else:
             return render(request, 'labTest.html',{'prescriptionId':prescriptionId})
         
     except:
-        return redirect('laboratoryTest',prescriptionId)
+        return render(request, 'labTest.html',{'prescriptionId':prescriptionId,'message':"Something Went Wrong!"})
 @doctordata_middleware      
 def diagnosis(request, patientId):
     try:

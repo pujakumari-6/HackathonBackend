@@ -1,8 +1,6 @@
 {% extends "base.html"%}
 {% load static %}
-
-
-
+{% block title %} <title>Diagnosis</title>{% endblock %}
 {% block content %} 
 <!DOCTYPE html>
 <html lang="en">
@@ -250,24 +248,15 @@
                         <th scope="col">Test Use</th>
                         <th scope="col">Test Description</th>
                     </tr>
+                      {% for var in data.laboratoryTest %}
                             <tr>
-                              {% for var in data.laboratoryTest %}
                                 <td>{{var.testName}}</td>
                                 <td>{{var.testSpecimen}}</td>
                                 <td>{{var.testBodySite}}</td>
                                 <td>{{var.testUse}}</td>
                                 <td>{{var.testDescription}}</td>
-                                <!-- <td> -->
-                              {% endfor %}
-                                
-                                   
-                                    <!-- {% if request.session.role == "Nurse" %}
-                                        <a href="#" class="btn btn-info btm-sm">Upload Report</a>
-                                     {% else %}   
-                                        <a href="#" class="btn btn-info btm-sm">Download Report</a>
-                                    {% endif %} -->
-                                <!-- </td> -->
                             </tr>
+                            {% endfor %}
             
                 </table>
             </div>
