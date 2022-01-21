@@ -8,7 +8,7 @@ from .models import *
 from django.contrib.auth import authenticate
 from .models import Prescription, Medicine, Diagnosis,MedicalDevice,LaboratoryTest,MedicineDirection,MedicineDirPrescriptionMap
 from healthcare.models import Patient, PatientRecord
-from accounts.middleware import  doctor_middleware , both_middleware,doctordata_middleware, bothdata_middleware
+from accounts.middleware import  doctor_middleware , both_middleware,doctordata_middleware, doctordata1_middleware
 from django.db import transaction
 
 from django.http import FileResponse
@@ -86,18 +86,20 @@ def searchPatient(request):
             return render(request, "patientlist.html", {'data':data})   
     
     except Exception as e:
-        print(e)
-        return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
+        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+        return render(request, "viewPatientRecord.html")
 
 @both_middleware
 def doctorHome(request):
     try:
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
+            messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+            return render(request, 'index.html')
         return render(request, "doctor.html", {}) 
     except Exception as e:
-        print(e)
-        return render(request, "index.html", {'message':'Something Went wrong'})
+        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+
+        return render(request, "index.html")
 
 # Patient List
 @both_middleware
@@ -105,7 +107,9 @@ def patientList(request):
     try:
         #print(request.session['role'])
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
+            messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+
+            return render(request, 'index.html')
         data_pagin = Patient.objects.all().order_by('-createdDate')
         paginator = Paginator(data_pagin, 2)
         page_number = request.GET.get('page')
@@ -113,7 +117,8 @@ def patientList(request):
         return render(request, "patientlist.html", {'data':data})     
     except Exception as e:
         print(e)
-        return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
+        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+        return render(request, "viewPatientRecord.html")
 
 # Patient Detail
 def patientRecord(request, patientId):
@@ -136,7 +141,7 @@ def patientRecord(request, patientId):
             return render(request, "viewPatientRecord.html", {'noRecord':True, 'details':patientDetails})
     except Exception as e:
         print(e)
-        # return render(request, "viewPatientRecord.html", {'message':'Something went wrong'})
+        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
         return redirect('/')
 
 # See Prescription
@@ -146,6 +151,8 @@ def viewMedicine(request,mdicineId,patientId):
         return render(request,'viewMedicine.html',{'medicineDetails': medicineDetails})
     except Exception as e:
         print(e)
+        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+
         return redirect('patientDiagnosis',patientId)
 
 def viewPrescription(request, prescriptionId):
@@ -183,9 +190,11 @@ def viewPrescription(request, prescriptionId):
        
     except Exception as e:
         print(e)
+        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+
         return HttpResponse("<h1>something went wrong!!!</h1>")   
 
-# @doctordata_middleware
+@doctordata1_middleware
 def laboratoryTest(request,prescriptionId):
     try:
         if request.method == 'POST':
@@ -243,7 +252,7 @@ def diagnosis(request, patientId):
         print(e)
         return render(request, "diagnosisPage.html",{'patient':patient, 'message':'Something Went Wrong!'})
 
-# @doctordata_middleware
+@doctordata1_middleware
 def medication(request, prescriptionId):
     try:
         if request.session['role']!= "Doctor":

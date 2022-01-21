@@ -6,6 +6,30 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
           <style>
+            .info-msg,
+            .success-msg,
+            .warning-msg,
+            .error-msg {
+              margin: 10px 0;
+              padding: 10px;
+              border-radius: 3px 3px 3px 3px;
+            }
+            
+            .success-msg {
+              color: #270;
+              background-color: #DFF2BF;
+            }
+            
+            .error-msg {
+              color: #D8000C;
+              background-color: #FFBABA;
+            }
+
+
+
+
+
+
                 .zoomOut{
                   transition: transform .2s; /* Animation */
                 }
@@ -121,6 +145,18 @@
 
                 
           </style>
+          {% if messages %}
+          {% for message in messages %} 
+          {% if message.tags %}
+             <div class="{{message.tags}}-msg" style="  text-align: center;">		  {% endif %}
+               
+         
+           <i ></i>
+               {{message}}
+               </div>
+               {% endfor %} 
+             {% endif %}	
+         
      </head>
     
    <div class="page-hero bg-image overlay-dark" style="background-image: linear-gradient(rgba(0, 0, 0.5, 0.527),rgba(0, 0, 0.5, 0.5)), url(../static/bg_image_1.jpg);">
@@ -197,5 +233,6 @@
           </div>
         </div> <!-- .bg-light -->
       </div> <!-- .bg-light -->
+
 
 {% endblock %}

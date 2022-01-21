@@ -16,10 +16,43 @@
           .activeDiv li{
               background-color: yellowgreen !important;
           }
+
+          .info-msg,
+          .success-msg,
+          .warning-msg,
+          .error-msg {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px 3px 3px 3px;
+          }
+          
+          .success-msg {
+            color: #270;
+            background-color: #DFF2BF;
+          }
+          
+          .error-msg {
+            color: #D8000C;
+            background-color: #FFBABA;
+          }
+          
+
     </style>
    
 </head>
 <body>
+  {% if messages %}
+ {% for message in messages %} 
+ {% if message.tags %}
+		<div class="{{message.tags}}-msg" style="  text-align: center;">		  {% endif %}
+		  
+
+	<i class="fa fa-times-circle"></i>
+			{{message}}
+		  </div>
+		  {% endfor %} 
+		{% endif %}	
+	
     
        <div class="container-fluid">
         <div class="card text-center custom-basic">
