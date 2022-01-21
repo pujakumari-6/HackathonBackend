@@ -289,7 +289,8 @@
                               <li class="list-group-item">Number Of Times: {{ meds.medsDir.doseTiming }}</li>
                               <li class="list-group-item">Additional Instruction: {{ meds.medsDir.additionalInstruction }}</li>
                               <li class="list-group-item">Reason: {{ meds.medsDir.reason }}</li>
-                              <li class="list-group-item"> <a href="#" class="btn btn-info btm-sm">View Medicine</a></li>
+                              <li class="list-group-item"> <a href="{% url 'viewMedicine' medicineId=meds.medsName.id prescriptionId=data.prescriptionId %}
+                                " class="btn btn-info btm-sm">View Medicine</a></li>
             
                             </ul>
                       </div>
