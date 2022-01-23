@@ -18,9 +18,11 @@ def choiseview(request):
         if request.session['role']== "Admin":
             return render(request, 'choise.html' )
         else:
-            return render(request, 'index.html', {'messages': "You Are Not Authenticated"})
+            messages.add_message(request, messages.ERROR, "You Are Not Authenticated")
+            return render(request, 'index.html')
     except:
-        return render(request, 'index.html', {'messages': "something went wrong!!"})
+        messages.add_message(request, messages.ERROR, "Something went wrong!!")
+        return render(request, 'index.html')
 
 
 @check_middleware
@@ -46,7 +48,6 @@ def doctor_register(request, roledata):
                     messages.add_message(request, messages.SUCCESS, "Doctor is created")
                     return redirect('')
                 else:
-                   
                     role_name = Role.objects.filter(role='Nurse').first()
             
                     userRole= UserroleMap.objects.create(user_id=user_obj, role_id=role_name)
@@ -111,7 +112,8 @@ def docter_login(request):
             return render(request, 'index.html')
     except Exception as e:
         print(e)
-        return render(request, 'index.html', {'messages': "Something Went Wrong!!"})
+        messages.add_message(request, messages.ERROR, "Something Went Wrong!")
+        return render(request, 'index.html')
 
 def doctor_logout(request):
     try:

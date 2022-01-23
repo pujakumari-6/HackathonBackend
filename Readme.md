@@ -17,14 +17,28 @@ Steps to run the project in your machine
 3. Make migrations using the following command:
 python manage.py makemigrations 
 python manage.py migrate
-4. Then run “python manage.py createsuperuser” to create an admin or superuser.
-5. Run “python manage.py runserver” to run the server on localhost.
+
+
+4. The accounts_role table is being used as master table so enter data in the same 
+using:
+INSERT INTO table_name (role)
+VALUES
+    (‘Doctor’),
+    (‘Nurse’),
+    (‘Admin’);
+5. Then run “python manage.py createsuperuser” to create an admin or superuser.
+And then inside the accounts_userrolemap insert data for the admin you created:
+INSERT INTO accounts_userrolemap  (user_id,role_id)
+VALUES
+    (1,3);
+6. Run “python manage.py runserver” to run the server on localhost.
 
 
 GETTING INTO THE PROJECT:
 This system has a ‘Home’ page which has two main goal:
 1. Sign in: To Sign in
 2. Prescription: To view prescriptions by patient using registration Id.
+3. About Us
   
 
 'About Us' page  allows us to get some more information about the quality and the services of the hospital.
@@ -39,39 +53,10 @@ A user can Sign in as:
 After clicking on Prescription, the below page will be rendered where patients can fill their registration numbers sent to them via registered email.
   
 
-
-
-After clicking on Get Report the following page will be displayed
-  
-
-Here all the details will be displayed including his diagnosis list.
-He can click on View Diagnosis to view details:
-  
-
-
-
 Admin Role:
 Here admin will have two options:
 1. Create Nurse
 2. Create Doctor
-Doctor Role:
-Doctor can view patient list:
-  
-
-On the below page, he can click on View Records to view the details of a patient:
-  
-
-Here, he can view the details and click on Add Prescriptions to create new prescriptions.
-  
-
-
-
-He can fill the form for diagnosis details and click on Add Medicine to prescribe medicine.
-  
-
-
-
-Using the below page, he can add medicine as many number of times as he wants:
   
 
 Nurse Role:
@@ -84,16 +69,124 @@ They will have two options unlike a doctor:
 
 On view patients, a list of patients will be rendered and there are two options:
 1. View records: On this page, they can view the patient data but can’t add Prescription.
-2. Update: To update the registered patient’s medical and other relevant details.
   
 
-Update Patient Page:
+After clicking on view records:
   
 
-From the Nurse Home page, they shecan choose to register a new patient by clicking Register Patient:
+Inside the Medical History tab, by clicking on the update button they can update the details of a patient.
+  
+
+Inside the Prescriptions tab, by clicking on view diagnosis they can view the details or by clicking on downloads, they can download the e prescription.
+  
+
+Inside the Diagnosis details tab:
+  
+
+Inside the medical device details tab:
+  
+
+Inside the tests tab:
+  
+
+Inside the medicine tab, where they can click on the view button to view the medicine details.
+  
+
+From the Nurse Home page, they they can choose to register a new patient by clicking Register Patient:
   
 
 When registrations is successfully, a success message will be displayed with an option to add his medical detail:
   
 
 Add Patient Details Page:
+  
+
+
+
+Doctor Role:
+Doctor can view patient list:
+  
+
+Unlike Nurse, doctors can Add Prescriptions:
+  
+
+
+
+Here, he can view the details and click on Add Prescriptions to create new prescriptions.
+He can fill the form for diagnosis details and medical device details.
+  
+
+
+
+
+
+After adding prescription and clicking on view diagnosis, they can add medicine and add tests.
+  
+
+
+
+
+
+class Medicine(models.Model):
+    name 
+    form    
+    category 
+    strength     
+    concentration 
+    unitOfPreparation 
+    manufacturer 
+    expiryDate 
+    amount 
+    role 
+    description 
+
+
+class Diagnosis(models.Model):
+    diagnosisName 
+    diagnosisBodySite     
+    dateOfOnset 
+    severity 
+    dateOfAbatement 
+    diagnosisCertainity
+    diagnosisDescription  
+    createdDate  
+
+
+class MedicalDevice(models.Model):
+    deviceName 
+    deviceBodySite 
+    deviceUse 
+    deviceDscription 
+
+
+class LaboratoryTest(models.Model):
+    testName 
+    testSpecimen 
+    testBodySite 
+    testUse 
+    testDescription 
+
+
+class LabTestPrescriptionMap(models.Model):
+    laboratoryTestId     
+    prescriptionId 
+
+
+class Prescription(models.Model):
+    patientId 
+    diagnosisId 
+    medicalDevice 
+
+
+class MedicineDirection(models.Model):
+    medicineId 
+    doseUnit
+    duration     
+    doseTiming 
+    additionalInstruction 
+    reason 
+
+
+class MedicineDirPrescriptionMap(models.Model):
+    prescriptionId     
+    medicineDirectionId
