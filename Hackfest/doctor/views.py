@@ -18,7 +18,6 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 
 def medicineFile(request, prescriptionId):
-   
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize= letter, bottomup= 0)
     textob= c.beginText()
@@ -96,20 +95,18 @@ def doctorHome(request):
         return render(request, "doctor.html", {}) 
     except Exception as e:
         messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
-
         return render(request, "index.html")
 
 # Patient List
 @both_middleware
 def patientList(request):
     try:
-        #print(request.session['role'])
         if request.session['role']!= "Doctor" and request.session['role']!="Nurse":
             messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
 
             return render(request, 'index.html')
         data_pagin = Patient.objects.all().order_by('-createdDate')
-        paginator = Paginator(data_pagin, 2)
+        paginator = Paginator(data_pagin, 10)
         page_number = request.GET.get('page')
         data = paginator.get_page(page_number)
         return render(request, "patientlist.html", {'data':data})     
@@ -186,9 +183,9 @@ def viewPrescription(request, prescriptionId):
        
     except Exception as e:
         print(e)
-        messages.add_message(request, messages.ERROR, "Please Add Valid Details !")
+        messages.add_message(request, messages.ERROR, "Something went wrong!")
 
-        return HttpResponse("<h1>something went wrong!!!</h1>")   
+        return render('/')   
 
 @doctordata1_middleware
 def laboratoryTest(request,prescriptionId):
